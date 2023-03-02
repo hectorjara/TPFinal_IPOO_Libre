@@ -5,7 +5,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `actividad` (
   `id_actividad` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `descripcion_corta` varchar(15) NOT NULL,
+  `descripcion_corta` varchar(15) UNIQUE NOT NULL,
   `descripcion_larga` varchar(255) NOT NULL,
   PRIMARY KEY (`id_actividad`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `actividad` (
 -- -------------------------------------------------------- Modulo
 CREATE TABLE IF NOT EXISTS `modulo` (
   `id_modulo` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(255) NOT NULL,
+  `descripcion` varchar(255) UNIQUE NOT NULL,
   `tope_inscripcion` int(11) UNSIGNED NOT NULL,
   `costo` int(11) UNSIGNED NOT NULL,
   `fecha_inicio` DATE NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `ingresante` (
   `id_ingresante` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `mail` varchar(255) NOT NULL,
   `legajo` int(11) UNSIGNED NOT NULL,
-  `dni` int(11) UNSIGNED NOT NULL,
+  `dni` int(11) UNSIGNED UNIQUE NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `apellido` varchar(255) NOT NULL,
   PRIMARY KEY (`id_ingresante`)
