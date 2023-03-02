@@ -5,7 +5,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `actividad` (
   `id_actividad` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `descripcion_corta` varchar(255) NOT NULL,
+  `descripcion_corta` varchar(15) NOT NULL,
   `descripcion_larga` varchar(255) NOT NULL,
   PRIMARY KEY (`id_actividad`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
