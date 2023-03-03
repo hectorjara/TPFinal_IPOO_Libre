@@ -1,7 +1,7 @@
 <?php
 include_once '../Control/AbmModulo.php';
 
-function insertarModulo(){
+function insertarModulo($enLinea){
 	$abmModulo = new AbmModulo();//descripcion,$tope_inscripcion, $costo, $obj_Actividad
 	echo o." Ingrese una descripcion: ".f;
 	$descripcion = trim(fgets(STDIN));
@@ -11,9 +11,19 @@ function insertarModulo(){
 	$costo = trim(fgets(STDIN));
 	echo o." Ingrese la Actividad del Modulo de la siguiente lista: \n".f;
     $actividadElegida = listaActividades();
-	$sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $actividadElegida);
+    //Consulto si es un Modulo en Linea o no---
+    if ($enLinea){
+        echo o." Ingrese el link del Modulo: ".f;
+        $link = trim(fgets(STDIN));
+        echo o." Ingrese la bonificacion que va a otorgar: ".f;
+        $bonificacion = trim(fgets(STDIN));
+        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $actividadElegida, $enLinea, $link, $bonificacion);
+    }else{
+        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $actividadElegida, $enLinea, null, null );
+    }
+    //------------------------------------------
 	if ($sePudoInsertar == "OK"){
-        echo ok."El Modulo fue ingresada con exito".f."\n";
+        echo ok."El Modulo fue ingresado con exito".f."\n";
     }else{
         echo er."Error al insertar modulo: ".$sePudoInsertar.f."\n";
     }
@@ -26,7 +36,7 @@ function listaModulos(){
         $numero = 0;
         foreach($col_Modulos as $unModulo){
             $numero = $numero +1;
-            echo o.$numero.f." ".$unModulo;// Elegir Actividad por numero
+            echo o.$numero.f." ".$unModulo;// Elegir Modulo por numero
         }
         echo o." Ingrese el numero que corresponde al Modulo: ".f;
         $op = trim(fgets(STDIN));
@@ -77,18 +87,22 @@ function mostrarAbmModulo(){
 		echo t." ------- ABM Modulo -------- ".f."\n";
 		echo o." Eliga una opcion: ".f."\n";
 		echo " 1 - Ingresar nuevo Modulo \n";
-		echo " 2 - Modificar una Modulo \n";
-        echo " 3 - Eliminar una Modulo \n";
+		echo " 2 - Ingresar nuevo Modulo en Linea \n";
+        echo " 3 - Modificar un Modulo \n";
+        echo " 4 - Eliminar un Modulo \n";
 		echo " 5 - Volver al menu principal \n";
 		echo " 7 - Salir \n";
 		$op = trim(fgets(STDIN));	
 		if ($op==1){
-			insertarModulo();	
+			insertarModulo(false);//No en linea
 		}		
 		if ($op==2){
-			modificarModulo();
+			insertarModulo(true);//En linea
         }
         if ($op==3){
+			modificarModulo();
+        }
+        if ($op==4){
 			eliminarModulo();
         }
 		if ($op==5){

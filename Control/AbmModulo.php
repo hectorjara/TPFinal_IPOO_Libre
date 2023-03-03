@@ -1,12 +1,18 @@
 <?php
 include_once '../Modelo/Modulo.php';
+include_once '../Modelo/ModuloEnLinea.php';
 
 class AbmModulo{
 
-	public function insertaModulo($descripcion,$tope_inscripcion, $costo, $obj_Actividad){
+	public function insertaModulo($descripcion,$tope_inscripcion, $costo, $obj_Actividad, $enLinea, $link, $bonificacion){
         $respuesta = null;
-		$unModulo = new Modulo();
-        $unModulo->cargar(null, $descripcion,$tope_inscripcion, $costo, $obj_Actividad);// null va a cambiar por el $id que devuelva la insercion
+		if ($enLinea){
+			$unModulo = new ModuloEnLinea();
+			$unModulo->cargarEnLinea(null, $descripcion,$tope_inscripcion, $costo, $obj_Actividad, $link, $bonificacion);// null va a cambiar por el $id que devuelva la insercion
+		}else{
+			$unModulo = new Modulo();
+			$unModulo->cargar(null, $descripcion,$tope_inscripcion, $costo, $obj_Actividad);// null va a cambiar por el $id que devuelva la insercion
+		}
 		$sePudoInsertar = $unModulo->insertar();
 		if ($sePudoInsertar){
 			$respuesta = "OK";	
