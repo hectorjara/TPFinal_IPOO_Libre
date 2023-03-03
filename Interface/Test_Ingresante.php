@@ -1,5 +1,6 @@
 <?php
 include_once 'Test_Actividad.php';
+include_once 'Test_Modulo.php';
 
 const t = "\033[43m";//Color Titulo
 const f = "\33[0m";  //Fin Color

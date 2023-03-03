@@ -50,24 +50,24 @@ class Actividad{
 		$this->mensajeOperacion=$mensajeOperacion;
 	}
 
-    public function buscar($descripcion_corta){
+    public function buscar($id_actividad){
         $respuesta = null;
 		$base=new BaseDatos();
-		$consultaActividad="Select * from actividad where descripcion_corta=".$descripcion_corta;
+		$consultaActividad="Select * from actividad where id_actividad=".$id_actividad;
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaActividad)){
 				if($row2=$base->Registro()){
-                    $this->setId_Actividad($row2['id_actividad']);
-					$this->setDescripcion_corta($descripcion_corta);
+                    $this->setId_Actividad($id_actividad);
+					$this->setDescripcion_corta($row2['descripcion_corta']);
 					$this->setDescripcion_larga($row2['descripcion_larga']);
                     $respuesta = $this; //Devuelve un objeto
 				}	
 		 	}else{
-                $this->setMensajeOperacion($base->getError());
+                $this->setMensajeOperacion($base->getError());//Error Ejecutar
 		 		$respuesta = false;		 		
 			}
 		}else{
-            $this->setMensajeOperacion($base->getError());
+            $this->setMensajeOperacion($base->getError());//Error Iniciar
 		 	$respuesta = false;		 	
 		}
         $base->Cerrar();
@@ -96,10 +96,10 @@ class Actividad{
                     $respuesta = $arregloActividades;
 				}			
 		 	}else{
-                $respuesta = $base->getError();		
+                $respuesta = $base->getError();//Error Ejecutar
 			}
 		}else {
-            $respuesta = $base->getError();	 	
+            $respuesta = $base->getError();//Error Iniciar
 		}
         $base->Cerrar();
 		return $respuesta;
@@ -116,10 +116,10 @@ class Actividad{
                 $this->setId_Actividad($id);
 				$respuesta = true;
 			}else {
-				$this->setMensajeOperacion($base->getError());			
+				$this->setMensajeOperacion($base->getError());//Error Insercion
 			}
 		} else {
-			$this->setMensajeOperacion($base->getError());	
+			$this->setMensajeOperacion($base->getError());//Error Iniciar
 		}
         $base->Cerrar();
         return $respuesta;
@@ -133,10 +133,10 @@ class Actividad{
 			if($base->Ejecutar($consultaModifica)){
 				$respuesta = true;				
 			}else{
-				$this->setMensajeOperacion($base->getError());
+				$this->setMensajeOperacion($base->getError());//Error Ejecutar
 			}
 		}else{
-			$this->setMensajeOperacion($base->getError());
+			$this->setMensajeOperacion($base->getError());//Error Iniciar
 		}
 		$base->Cerrar();
         return $respuesta;
@@ -150,10 +150,10 @@ class Actividad{
 			if($base->Ejecutar($consultaBorra)){
 				$respuesta = true;
 			}else{
-				$this->setMensajeOperacion($base->getError());				
+				$this->setMensajeOperacion($base->getError());//Error Ejecutar
 			}
 		}else{
-			$this->setMensajeOperacion($base->getError());			
+			$this->setMensajeOperacion($base->getError());//Error Iniciar
 		}
         $base->Cerrar();
         return $respuesta;

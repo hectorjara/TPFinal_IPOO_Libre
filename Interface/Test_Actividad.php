@@ -15,55 +15,50 @@ function insertarActividad(){
     }
 }
 
-function modificarActividad(){
-	$abmActividad = new AbmActividad();
+function listaActividades(){
+    $abmActividad = new AbmActividad();
     $col_Actividades = $abmActividad->listarActividades();
-    if (is_array($col_Actividades)){// Procedo si obtengo el arreglo
+    if (is_array($col_Actividades)){
         $numero = 0;
         foreach($col_Actividades as $unaActividad){
             $numero = $numero +1;
             echo o.$numero.f." ".$unaActividad;// Elegir Actividad por numero
         }
-        echo o." Ingrese el numero que corresponde a la actividad a modificar: ".f;
+        echo o." Ingrese el numero que corresponde a la actividad: ".f;
         $op = trim(fgets(STDIN));
         $actividadElegida = $col_Actividades[$op-1];// Eligo la actividad en el arreglo por el indice
-        echo "Ha elegido ". $actividadElegida;// Muestro la actividad elegida para orientacion del usuario
-        echo o." Ingrese una nueva descripcion corta: ".f;
-        $descripcion_corta = trim(fgets(STDIN));
-        echo o." Ingrese una nueva descripcion mas detallada: ".f;
-        $descripcion_larga = trim(fgets(STDIN));
-        $sePudoModificar = $abmActividad->modificarActividad($actividadElegida, $descripcion_corta, $descripcion_larga);
-        if ($sePudoModificar == "OK"){
-            echo ok." La actividad fue modificada con exito".f."\n";
-        }else{
-            echo er."Error al modificar: ".$sePudoModificar.f."\n";// Es un error
-        }
+        return $actividadElegida;
     }else{
-        echo er."Error al listar: ".$col_Actividades.f."\n";
+        echo er."Error al listar Actividades en AbmActividad: ".$col_Actividades.f."\n";
+    }
+}
+
+function modificarActividad(){
+	$abmActividad = new AbmActividad();
+    $actividadElegida = listaActividades();
+    echo "Ha elegido ". $actividadElegida;// Muestro la actividad elegida para orientacion del usuario
+    echo o." Ingrese una nueva descripcion corta: ".f;
+    $descripcion_corta = trim(fgets(STDIN));
+    echo o." Ingrese una nueva descripcion mas detallada: ".f;
+    $descripcion_larga = trim(fgets(STDIN));
+    $sePudoModificar = $abmActividad->modificarActividad($actividadElegida, $descripcion_corta, $descripcion_larga);
+    if ($sePudoModificar == "OK"){
+        echo ok." La actividad fue modificada con exito".f."\n";
+        echo $actividadElegida;
+    }else{
+        echo er."Error al modificar Actividad: ".$sePudoModificar.f."\n";// Es un error
     }
 }
 
 function eliminarActividad(){
 	$abmActividad = new AbmActividad();
-    $col_Actividades = $abmActividad->listarActividades();
-    if (is_array($col_Actividades)){// Procedo si obtengo el arreglo
-        $numero = 0;
-        foreach($col_Actividades as $unaActividad){
-            $numero = $numero +1;
-            echo o.$numero.f." ".$unaActividad;// Elegir Actividad por numero
-        }
-        echo o." Ingrese el numero que corresponde a la actividad a eliminar: ".f;
-        $op = trim(fgets(STDIN));
-        $actividadElegida = $col_Actividades[$op-1];// Eligo la actividad en el arreglo por el indice
-        echo "Ha elegido ". $actividadElegida;// Muestro la actividad elegida para orientacion del usuario
-        $sePudoEliminar = $abmActividad->eliminarActividad($actividadElegida);
-        if ($sePudoEliminar == "OK"){
-            echo ok." La actividad fue eliminada con exito".f."\n";
-        }else{
-            echo er."Error al eliminar: ".$sePudoEliminar.f."\n";
-        }
+    $actividadElegida = listaActividades();
+    echo "Ha elegido ". $actividadElegida;// Muestro la actividad elegida para orientacion del usuario
+    $sePudoEliminar = $abmActividad->eliminarActividad($actividadElegida);
+    if ($sePudoEliminar == "OK"){
+        echo ok." La actividad fue eliminada con exito".f."\n";
     }else{
-        echo er."Error al listar: ".$col_Actividades.f."\n";
+        echo er."Error al eliminar Actividad: ".$sePudoEliminar.f."\n";
     }
 }
 
