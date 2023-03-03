@@ -22,12 +22,16 @@ class AbmModulo{
         return $respuesta;
 	}
 
-	public function modificarModulo($obj_Modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad){
+	public function modificarModulo($obj_Modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad, $enLinea, $link, $bonificacion){
         $respuesta = null;
 		$obj_Modulo->setDescripcion($descripcion);
         $obj_Modulo->setTope_Inscripcion($tope_inscripcion);
         $obj_Modulo->setCosto($costo);
         $obj_Modulo->setObj_Actividad($obj_Actividad);
+		if ($enLinea){
+			$obj_Modulo->setLink($link);
+			$obj_Modulo->setBonificacion($bonificacion);
+		}
 		$sePudoModificar = $obj_Modulo->modificar();
 		if ($sePudoModificar) {
 			$respuesta = "OK";
@@ -51,6 +55,10 @@ class AbmModulo{
     public function listarModulos($condicion=""){
 		$col_Modulos = Modulo::listar($condicion);
 		return $col_Modulos;
+    }
+	public function listarModulosEnLinea($condicion=""){
+		$col_ModulosEnLinea = ModuloEnLinea::listar($condicion);
+		return $col_ModulosEnLinea;
     }
 }
 ?>

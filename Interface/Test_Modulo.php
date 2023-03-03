@@ -32,15 +32,31 @@ function insertarModulo($enLinea){
 function listaModulos(){
     $abmModulo = new AbmModulo();
     $col_Modulos = $abmModulo->listarModulos();
+    $col_ModulosEnLinea = $abmModulo->listarModulosEnLinea();
     if (is_array($col_Modulos)){
         $numero = 0;
+        $numerosEnLinea = array();//Array de numeros que son de ModulosEnLinea
         foreach($col_Modulos as $unModulo){
             $numero = $numero +1;
             echo o.$numero.f." ".$unModulo;// Elegir Modulo por numero
         }
+        if(is_array($col_ModulosEnLinea)){
+            foreach($col_ModulosEnLinea as $unModulo){
+                $numero = $numero +1;
+                array_push($numerosEnLinea, $numero);
+            echo o.$numero.f." ".$unModulo;// Elegir Modulo En Linea por numero
+            }            
+        }else{
+            echo er."Error al listar Modulos En Linea: ".$col_ModulosEnLinea.f."\n";
+        }
         echo o." Ingrese el numero que corresponde al Modulo: ".f;
         $op = trim(fgets(STDIN));
-        $moduloElegido = $col_Modulos[$op-1];// Eligo el Modulo en el arreglo por el indice
+        if (in_array($op, $numerosEnLinea)) {
+            $cantEnPresencial = count($col_Modulos);//Funcionalidad para elegir correctamente el tipo de Modulo al ingresar un numero
+            $moduloElegido = $col_ModulosEnLinea[$op-1-$cantEnPresencial];// Eligo el Modulo en el arreglo por el indice
+        } else {
+            $moduloElegido = $col_Modulos[$op-1];// Eligo el Modulo en el arreglo por el indice
+        }        
         return $moduloElegido;
     }else{
         echo er."Error al listar Modulos: ".$col_Modulos.f."\n";
@@ -60,7 +76,15 @@ function modificarModulo(){
     $costo = trim(fgets(STDIN));
     echo o." Ingrese la Actividad del Modulo de la siguiente lista: \n".f;
     $actividadElegida = listaActividades();
-    $sePudoModificar = $abmModulo->modificarModulo($moduloElegido, $descripcion, $tope_inscripcion, $costo, $actividadElegida);
+    if ($moduloElegido instanceof ModuloEnLinea){// Modifico Modulo En Linea
+        echo o." Ingrese el link del Modulo: ".f;
+        $link = trim(fgets(STDIN));
+        echo o." Ingrese la bonificacion que va a otorgar: ".f;
+        $bonificacion = trim(fgets(STDIN));
+        $sePudoModificar = $abmModulo->modificarModulo($moduloElegido, $descripcion, $tope_inscripcion, $costo, $actividadElegida, true, $link, $bonificacion);
+    }elseif($moduloElegido instanceof Modulo){
+        $sePudoModificar = $abmModulo->modificarModulo($moduloElegido, $descripcion, $tope_inscripcion, $costo, $actividadElegida, false, null, null);
+    }
     if ($sePudoModificar == "OK"){
         echo ok." El modulo fue modificado con exito".f."\n";
         echo $moduloElegido;
