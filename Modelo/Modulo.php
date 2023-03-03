@@ -88,7 +88,8 @@ class Modulo{
                         $this->setObj_Actividad($obj_Actividad); //Setea el objeto Actividad al objeto Modulo
                         $respuesta = $this; //Devuelve el objeto Modulo
                     }else{
-                        $respuesta = $obj_Actividad->getMensajeOperacion(); //Error al encontrar el objeto Actividad correspondiente
+                        $this->setMensajeOperacion($obj_Actividad->getMensajeOperacion()); //Error al encontrar el objeto Actividad correspondiente
+						$respuesta = false;
                     }
 				}	
 		 	}else{
@@ -113,8 +114,7 @@ class Modulo{
 		}
 		$consultaModulos.=" order by id_modulo ";
 		if($base->Iniciar()){
-			if($base->Ejecutar($consultaModulos)){				
-				$arregloModulos= array();
+			if($base->Ejecutar($consultaModulos)){
 				while($row2=$base->Registro()){
 					$id_modulo =   $row2['id_modulo'];
 					$descripcion = $row2['descripcion'];
