@@ -21,7 +21,7 @@ class Inscripcion{
 	public function cargar($id_inscripcion, $fechaInscripcion,$costoFinal, $obj_Ingresante){
         $this->setId_inscripcion($id_inscripcion);
 		$this->setFechaInscripcion($fechaInscripcion);
-		$this->setcostoFinal($costoFinal);
+		$this->setCostoFinal($costoFinal);
         $this->setObj_Ingresante($obj_Ingresante);
 	}
 
@@ -42,7 +42,7 @@ class Inscripcion{
 	public function getCostoFinal(){
 		return $this->costoFinal;
 	}
-	public function setcostoFinal($costoFinal){
+	public function setCostoFinal($costoFinal){
 		return $this->costoFinal=$costoFinal;
 	}
 
@@ -69,7 +69,7 @@ class Inscripcion{
 				if($row2=$base->Registro()){
                     $this->setId_inscripcion($id_inscripcion);
 					$this->setFechaInscripcion($row2['fecha_inscripcion']);
-					$this->setcostoFinal($row2['costo_final']);
+					$this->setCostoFinal($row2['costo_final']);
                     $obj_Ingresante = new Ingresante();
 					$obj_Ingresante->buscar($row2['id_ingresante']);
                     if ($obj_Ingresante){    
