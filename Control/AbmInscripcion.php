@@ -3,6 +3,8 @@ include_once '../Modelo/Inscripcion.php';
 
 class AbmInscripcion{
 
+    public static $ingresanteLogueado = null;
+
 	public function insertaInscripcion($fechaInscripcion, $costoFinal, $obj_Ingresante){
         $respuesta = null;
 		$unaInscripcion = new Inscripcion();

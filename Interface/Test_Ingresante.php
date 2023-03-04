@@ -1,6 +1,8 @@
 <?php
 include_once 'Test_Actividad.php';
 include_once 'Test_Modulo.php';
+include_once  'Test_Inscripcion.php';
+include_once 'Test_MenuIngresantes.php';
 
 const t = "\033[43m";//Color Titulo
 const f = "\33[0m";  //Fin Color
@@ -17,8 +19,8 @@ function mostrarMenu(){
 		echo o." Eliga una opcion: ".f."\n";
 		echo " 1 - ABM Actividad \n";
 		echo " 2 - ABM Modulo  \n";
-		echo " 3 - ABM Inscripciones \n";
-		echo " 4 - ............... \n";
+		echo " 3 - ABM Inscripcion \n";
+		echo " 4 - Menu Ingresantes \n";
 		echo " 5 - Llenar Datos por defecto \n"; 
 		echo " 6 - Limpiar la Base de Datos \n";
 		echo " 7 - Salir \n";
@@ -33,11 +35,11 @@ function mostrarMenu(){
 		}	
 		
 		if ($op==3){
-			mostrarAbmInscripciones();
+			mostrarAbmInscripcion();
 		}
 
 		if ($op==4){
-			nada();
+			mostrarMenuIngresantes();
 		}
 		if ($op==5){
 			llenarDatos();
