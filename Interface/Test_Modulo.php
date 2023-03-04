@@ -96,7 +96,7 @@ function modificarModulo(){
 function eliminarModulo(){
 	$abmModulo = new AbmModulo();
         $moduloElegido = listaModulos();
-        echo "Ha elegido ". $moduloElegido;// Muestro la actividad elegida para orientacion del usuario
+        echo "Ha elegido ". $moduloElegido;// Muestro el modulo elegido para orientacion del usuario
         $sePudoEliminar = $abmModulo->eliminarModulo($moduloElegido);
         if ($sePudoEliminar == "OK"){
             echo ok." El modulo fue eliminado con exito".f."\n";
