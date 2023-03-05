@@ -13,9 +13,15 @@ function insertarInscripcion(){
         $otroModulo = "s";
 	    While ($otroModulo=="S" || $otroModulo=="s" ){
             $moduloElegido = listaModulos();
-            array_push($colModulos, $moduloElegido);//----------Agrego cada modulo elegido Falta restringir segun consignas
-            echo o." Desea ingresar otro Modulo? S/s ".f."\n";
-		    $otroModulo = trim(fgets(STDIN));
+            if ($abmInscripcion->seRepiteActividad($moduloElegido, $colModulos)){ // Al crear una inscripcion inscripción no permitir que un ingresante se inscriba a mas de un módulo, de una misma actividad.
+                echo er."Ya te inscribiste a un Modulo con la Actividad: ".$moduloElegido->getObj_Actividad()->getDescripcion_corta().f."\n";
+                echo o." Desea ingresar otro Modulo? S/s ".f."\n";
+                $otroModulo = trim(fgets(STDIN));
+            }else{
+                array_push($colModulos, $moduloElegido);
+                echo o." Desea ingresar otro Modulo? S/s ".f."\n";
+                $otroModulo = trim(fgets(STDIN));
+            }            
         }
         //echo "Ha elegido ". $moduloElegido;// Deberian ser varios
         $sePudoInsertar = $abmInscripcion->insertaInscripcion($fechaInscripcion, $obj_Ingresante, $colModulos);
@@ -70,9 +76,15 @@ function modificarInscripcion(){
         $otroModulo = "s";
         While ($otroModulo=="S" || $otroModulo=="s" ){
             $moduloElegido = listaModulos();
-            array_push($colModulos, $moduloElegido);//----------Agrego cada modulo elegido Falta restringir segun consignas
-            echo o." Desea ingresar otro Modulo? S/s ".f."\n";
-            $otroModulo = trim(fgets(STDIN));
+            if ($abmInscripcion->seRepiteActividad($moduloElegido, $colModulos)){ // Al crear una inscripcion inscripción no permitir que un ingresante se inscriba a mas de un módulo, de una misma actividad.
+                echo er."Ya te inscribiste a un Modulo con la Actividad: ".$moduloElegido->getObj_Actividad()->getDescripcion_corta().f."\n";
+                echo o." Desea ingresar otro Modulo? S/s ".f."\n";
+                $otroModulo = trim(fgets(STDIN));
+            }else{
+                array_push($colModulos, $moduloElegido);
+                echo o." Desea ingresar otro Modulo? S/s ".f."\n";
+                $otroModulo = trim(fgets(STDIN));
+            }  
         }
         //echo "Ha elegido ". $moduloElegido;// Deberian ser varios
         $sePudoModificar = $abmInscripcion->modificarInscripcion($inscripcionElegida, $fechaInscripcion, $obj_Ingresante, $colModulos);

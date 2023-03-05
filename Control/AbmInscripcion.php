@@ -47,5 +47,19 @@ class AbmInscripcion{
 		$col_Inscripciones = Inscripcion::listar($condicion);
 		return $col_Inscripciones;
     }
+
+	public function seRepiteActividad($moduloElegido, $colModulos){
+		$actividadModuloElegido = $moduloElegido->getObj_Actividad();
+		$i = 0;
+		$count = count($colModulos);
+		while ($i < $count) {
+			$actividadUnModulo = $colModulos[$i]->getObj_Actividad();
+			if ($actividadModuloElegido == $actividadUnModulo){
+				return true;
+			}
+		$i++;
+		}
+		return false;
+	}
 }
 ?>
