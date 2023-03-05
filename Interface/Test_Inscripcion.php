@@ -7,10 +7,7 @@ function insertarInscripcion(){
         echo er."No estas logueado o no has elegido Ingresante.\nVe al Menu Ingresantes.\n".f;
     }else{
         $abmInscripcion = new AbmInscripcion();
-        echo " Ingrese una Fecha-test: ";
-        $fechaInscripcion = trim(fgets(STDIN));
-        echo " Ingrese Costo-test: ";
-        $costoFinal = trim(fgets(STDIN));
+        $fechaInscripcion = date('Y-m-d');
         //-----------------------------------
         $colModulos = array();
         $otroModulo = "s";
@@ -21,7 +18,7 @@ function insertarInscripcion(){
 		    $otroModulo = trim(fgets(STDIN));
         }
         //echo "Ha elegido ". $moduloElegido;// Deberian ser varios
-        $sePudoInsertar = $abmInscripcion->insertaInscripcion($fechaInscripcion, $costoFinal, $obj_Ingresante, $colModulos);
+        $sePudoInsertar = $abmInscripcion->insertaInscripcion($fechaInscripcion, $obj_Ingresante, $colModulos);
         if ($sePudoInsertar == "OK"){
             echo ok."La Inscripcion fue ingresada con exito".f."\n";
         }else{
@@ -55,10 +52,7 @@ function modificarInscripcion(){
     }else{
         $abmInscripcion = new AbmInscripcion();
         $inscripcionElegida = listaInscripciones();
-        echo " Ingrese una Fecha-test: ";
-        $fechaInscripcion = trim(fgets(STDIN));
-        echo " Ingrese Costo-test: ";
-        $costoFinal = trim(fgets(STDIN));
+        $fechaInscripcion = date('Y-m-d');
         //-----------------------------------
         $colModulos = array();
         $otroModulo = "s";
@@ -69,7 +63,7 @@ function modificarInscripcion(){
             $otroModulo = trim(fgets(STDIN));
         }
         //echo "Ha elegido ". $moduloElegido;// Deberian ser varios
-        $sePudoModificar = $abmInscripcion->modificarInscripcion($inscripcionElegida, $fechaInscripcion, $costoFinal, $obj_Ingresante, $colModulos);
+        $sePudoModificar = $abmInscripcion->modificarInscripcion($inscripcionElegida, $fechaInscripcion, $obj_Ingresante, $colModulos);
         if ($sePudoModificar == "OK"){
             echo ok." La inscripcion fue modificada con exito".f."\n";
             echo $inscripcionElegida;

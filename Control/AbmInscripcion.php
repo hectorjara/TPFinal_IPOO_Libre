@@ -5,10 +5,10 @@ class AbmInscripcion{
 
     public static $ingresanteLogueado = null;
 
-	public function insertaInscripcion($fechaInscripcion, $costoFinal, $obj_Ingresante, $col_Modulos){
+	public function insertaInscripcion($fechaInscripcion, $obj_Ingresante, $col_Modulos){
         $respuesta = null;
 		$unaInscripcion = new Inscripcion();
-        $unaInscripcion->cargar(null, $fechaInscripcion, $costoFinal, $obj_Ingresante, $col_Modulos);// null va a cambiar por el $id que devuelva la insercion
+        $unaInscripcion->cargar(null, $fechaInscripcion, $obj_Ingresante, $col_Modulos);// null va a cambiar por el $id que devuelva la insercion
 		$sePudoInsertar = $unaInscripcion->insertar();
 		if ($sePudoInsertar){
 			$respuesta = "OK";	
@@ -18,10 +18,9 @@ class AbmInscripcion{
         return $respuesta;
 	}
 
-	public function modificarInscripcion($obj_Inscripcion, $fechaInscripcion, $costoFinal, $obj_Ingresante, $col_Modulos){
+	public function modificarInscripcion($obj_Inscripcion, $fechaInscripcion, $obj_Ingresante, $col_Modulos){
         $respuesta = null;
 		$obj_Inscripcion->setFechaInscripcion($fechaInscripcion);
-        $obj_Inscripcion->setCostoFinal($costoFinal);
         $obj_Inscripcion->setObj_Ingresante($obj_Ingresante);
 		$obj_Inscripcion->setCol_Modulos($col_Modulos);
 		$sePudoModificar = $obj_Inscripcion->modificar();

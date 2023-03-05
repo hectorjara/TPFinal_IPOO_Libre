@@ -12,10 +12,10 @@ class ModuloEnLinea extends Modulo{
 	public function __construct(){
         parent::__construct();
         $this->link = "";
-		$this->bonificacion= 0;
+		$this->bonificacion= 20;
 	}
 
-	public function cargarEnLinea($id_modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad, $link, $bonificacion){
+	public function cargarEnLinea($id_modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad, $link, $bonificacion){// O tambien $bonificacion = 20, Pero ya esta por defecto en el constructor.
         parent::cargar($id_modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad);
         $this->setLink($link);
 		$this->setBonificacion($bonificacion);
@@ -161,6 +161,11 @@ class ModuloEnLinea extends Modulo{
         return $respuesta;
 	}
 
+    public function darCostoModulo(){
+		$costoModulo = $this->getCosto();
+        $costoModulo = $costoModulo - $costoModulo * $this->getBonificacion()/100;
+        return $costoModulo;
+	}
 
 	public function __toString(){
         $cadena = "Modulo en linea:\n".

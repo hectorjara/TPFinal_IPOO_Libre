@@ -11,6 +11,7 @@ class Modulo{
     private $mensajeOperacion;
     private $costo;
     private $obj_Actividad;
+	private $col_Inscripciones;
 
 	//metodos
 	public function __construct(){
@@ -19,6 +20,7 @@ class Modulo{
 		$this->tope_inscripcion= "";
         $this->costo= 0;
         $this->obj_Actividad = null;
+		$this->col_Inscripciones = [];
 	}
 
 	public function cargar($id_modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad){
@@ -62,6 +64,13 @@ class Modulo{
 	}
 	public function setObj_Actividad($obj_Actividad){
 		return $this->obj_Actividad=$obj_Actividad;
+	}
+
+	public function getCol_Inscripciones(){
+		return $this->col_Inscripciones;
+	}
+	public function setCol_Inscripciones($col_Inscripciones){
+		return $this->col_Inscripciones=$col_Inscripciones;
 	}
 
     public function getMensajeOperacion(){
@@ -183,6 +192,7 @@ class Modulo{
 	public function eliminar(){	
         $respuesta = false;
 		$base=new BaseDatos();
+		//Debo eliminar de la tabla intermedia la relacion y si la inscripcion tenia un solo modulo, proceder a borrar la inscripcion.
 		if($base->Iniciar()){
 			$consultaBorra="DELETE FROM modulo  WHERE id_modulo=". $this->getId_Modulo();
 			if($base->Ejecutar($consultaBorra)){
@@ -197,12 +207,16 @@ class Modulo{
         return $respuesta;
 	}
 
+	public function darCostoModulo(){
+		return $this->getCosto();
+	}
+
 
 	public function __toString(){
         $cadena = "Modulo:\n".
                 "Descripcion:".$this->getDescripcion()."\n".
                 "Tope: ".$this->getTope_Inscripcion()."\n".
-                "Costo: ".$this->getTope_Inscripcion()."\n".
+                "Costo: ".$this->getCosto()."\n".
                 "Actividad: ".$this->getObj_Actividad()->getDescripcion_corta()."\n";// <--------
         return $cadena;
 	}

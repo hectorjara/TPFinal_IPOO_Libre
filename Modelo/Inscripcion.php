@@ -15,15 +15,14 @@ class Inscripcion{
 	public function __construct(){
         $this->id_inscripcion = 0;
 		$this->fechaInscripcion= "";
-		$this->costoFinal= "";
+		$this->costoFinal= 0;
         $this->obj_Ingresante = null;
-		$this->col_Modulos = null;
+		$this->col_Modulos = [];
 	}
 
-	public function cargar($id_inscripcion, $fechaInscripcion,$costoFinal, $obj_Ingresante, $col_Modulos){
+	public function cargar($id_inscripcion, $fechaInscripcion, $obj_Ingresante, $col_Modulos){
         $this->setId_inscripcion($id_inscripcion);
 		$this->setFechaInscripcion($fechaInscripcion);
-		$this->setCostoFinal($costoFinal);
         $this->setObj_Ingresante($obj_Ingresante);
 		$this->setCol_Modulos($col_Modulos);
 	}
@@ -43,9 +42,15 @@ class Inscripcion{
 	}
 
 	public function getCostoFinal(){
-		return $this->costoFinal;
+		$costoFinal = 0;
+		$col_Modulos= $this->getCol_Modulos();
+		foreach($col_Modulos as $unModulo){
+			$costoFinal = $costoFinal + $unModulo->darCostoModulo();
+			echo "-----------".$costoFinal."----------";
+		}
+		return $costoFinal;
 	}
-	public function setCostoFinal($costoFinal){
+	public function setCostoFinal($costoFinal){//No se usa
 		return $this->costoFinal=$costoFinal;
 	}
 
@@ -79,7 +84,6 @@ class Inscripcion{
 				if($row2=$base->Registro()){
                     $this->setId_inscripcion($id_inscripcion);
 					$this->setFechaInscripcion($row2['fecha_inscripcion']);
-					$this->setCostoFinal($row2['costo_final']);
 					//------------------------------------------------Busqueda de Ingresante perteneciente a la inscripcion
                     $obj_Ingresante = new Ingresante();
 					$obj_Ingresante->buscar($row2['id_ingresante']);
@@ -129,7 +133,6 @@ class Inscripcion{
 				while($row2=$base->Registro()){
 					$id_inscripcion =   $row2['id_inscripcion'];
 					$fechaInscripcion = $row2['fecha_inscripcion'];
-                    $costoFinal = $row2['costo_final'];
 					//------------------------------------------------- Busqueda de Ingresante perteneciente a la inscripcion
                     $obj_Ingresante = new Ingresante();
 					$obj_Ingresante->buscar($row2['id_ingresante']);
@@ -140,7 +143,7 @@ class Inscripcion{
 						WHERE i.id_inscripcion = ".$id_inscripcion);
 						if (is_array($col_Modulos)){
 							$unaInscripcion = new Inscripcion();
-							$unaInscripcion->cargar($id_inscripcion, $fechaInscripcion, $costoFinal, $obj_Ingresante, $col_Modulos);//Aqui se setea el objeto Ingresante a la inscripcion
+							$unaInscripcion->cargar($id_inscripcion, $fechaInscripcion, $obj_Ingresante, $col_Modulos);//Aqui se setea el objeto Ingresante a la inscripcion
 							array_push($arregloinscripciones,$unaInscripcion);
 							//-------------------------------------------------------------------------
 							$respuesta = $arregloinscripciones;// Devuelve el arreglo de Inscripciones-
@@ -167,8 +170,8 @@ class Inscripcion{
         $respuesta = false;
 		$base=new BaseDatos();
         $id_Ingresante = $this->getObj_Ingresante()->getId_ingresante();
-		$consultaInsertar="INSERT INTO inscripcion( fecha_inscripcion, costo_final, id_ingresante) 
-				VALUES ('".$this->getFechaInscripcion()."' , '".$this->getCostoFinal()."' , '".$id_Ingresante."')";
+		$consultaInsertar="INSERT INTO inscripcion( fecha_inscripcion, id_ingresante) 
+				VALUES ('".$this->getFechaInscripcion()."' , '".$id_Ingresante."')";
 		if($base->Iniciar()){
 			if($id = $base->devuelveIDInsercion($consultaInsertar)){
                 $this->setId_inscripcion($id);
@@ -201,7 +204,7 @@ class Inscripcion{
         $respuesta = false;
 		$base=new BaseDatos();
         $id_Ingresante = $this->getObj_Ingresante()->getId_ingresante();// <-----------
-		$consultaModifica="UPDATE inscripcion SET fecha_inscripcion='".$this->getFechaInscripcion()."', costo_final='".$this->getCostoFinal()."', id_ingresante='".$id_Ingresante."' WHERE id_inscripcion=". $this->getId_inscripcion();
+		$consultaModifica="UPDATE inscripcion SET fecha_inscripcion='".$this->getFechaInscripcion()."', id_ingresante='".$id_Ingresante."' WHERE id_inscripcion=". $this->getId_inscripcion();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
 				$consultaBorrarModulos = "DELETE FROM `inscripcion-modulo` WHERE `id_inscripcion` = ".$this->getId_inscripcion().";";
