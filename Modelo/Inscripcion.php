@@ -46,7 +46,6 @@ class Inscripcion{
 		$col_Modulos= $this->getCol_Modulos();
 		foreach($col_Modulos as $unModulo){
 			$costoFinal = $costoFinal + $unModulo->darCostoModulo();
-			echo "-----------".$costoFinal."----------";
 		}
 		return $costoFinal;
 	}
@@ -149,7 +148,7 @@ class Inscripcion{
 							$respuesta = $arregloinscripciones;// Devuelve el arreglo de Inscripciones-
 							//-------------------------------------------------------------------------
 						}else{
-							echo er."Error al listar modulos pertenecientes a una inscripcion a listar inscripciones: ".$col_Modulos.f;
+							$respuesta = er."Error al listar modulos pertenecientes a una inscripcion a listar inscripciones: ".$col_Modulos.f;
 						}
                     }else{
                         $respuesta = $obj_Ingresante->getMensajeOperacion(); //Error al encontrar el objeto Ingresante correspondiente

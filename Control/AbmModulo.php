@@ -52,7 +52,7 @@ class AbmModulo{
         return $respuesta;
 	}
 
-    public function listarModulos($condicion=""){
+    public function listarModulos($condicion=" WHERE id_modulo NOT IN (SELECT id_modulo FROM modulo_en_linea) "){
 		$col_Modulos = Modulo::listar($condicion);
 		return $col_Modulos;
     }

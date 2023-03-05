@@ -45,6 +45,18 @@ function listaInscripciones(){
     }
 }
 
+function visualizarInscripciones(){
+    $abmInscripcion = new AbmInscripcion();
+    $col_Inscripciones = $abmInscripcion->listarInscripciones();
+    if (is_array($col_Inscripciones)){
+        foreach($col_Inscripciones as $unaInscripcion){
+            echo $unaInscripcion;
+        }
+    }else{
+        echo er."Error al listar Inscripciones en AbmInscripcion: ".$col_Inscripciones.f."\n";
+    }
+}
+
 function modificarInscripcion(){
     $obj_Ingresante = AbmInscripcion::$ingresanteLogueado;
     if (is_null($obj_Ingresante)){
@@ -93,6 +105,7 @@ function mostrarAbmInscripcion(){
 		echo " 1 - Ingresar nueva Inscripcion \n";
 		echo " 2 - Modificar una Inscripcion \n";
         echo " 3 - Eliminar una Inscripcion \n";
+        echo " 4 - Visualizar todas las Inscripciones \n";
 		echo " 5 - Volver al menu principal \n";
 		echo " 7 - Salir \n";
 		$op = trim(fgets(STDIN));	
@@ -104,6 +117,9 @@ function mostrarAbmInscripcion(){
         }
         if ($op==3){
 			eliminarInscripcion();
+        }
+        if ($op==4){
+			visualizarInscripciones();
         }
 		if ($op==5){
 			mostrarMenu();
