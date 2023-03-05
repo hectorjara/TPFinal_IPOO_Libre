@@ -110,9 +110,9 @@ class Modulo{
 		$base=new BaseDatos(); 
 		$consultaModulos="Select * from modulo ";
 		if ($condicion!=""){
-			$consultaModulos.=' where '.$condicion;
+			$consultaModulos.= $condicion;
 		}
-		$consultaModulos.=" order by id_modulo ";
+		$consultaModulos.=" order by modulo.id_modulo ";
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModulos)){
 				while($row2=$base->Registro()){

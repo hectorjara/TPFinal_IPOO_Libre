@@ -8,6 +8,7 @@ class Inscripcion{
 	private $fechaInscripcion;
 	private $costoFinal;
     private $obj_Ingresante;
+	private $col_Modulos;
     private $mensajeOperacion;
 
 	//metodos
@@ -16,13 +17,15 @@ class Inscripcion{
 		$this->fechaInscripcion= "";
 		$this->costoFinal= "";
         $this->obj_Ingresante = null;
+		$this->col_Modulos = null;
 	}
 
-	public function cargar($id_inscripcion, $fechaInscripcion,$costoFinal, $obj_Ingresante){
+	public function cargar($id_inscripcion, $fechaInscripcion,$costoFinal, $obj_Ingresante, $col_Modulos){
         $this->setId_inscripcion($id_inscripcion);
 		$this->setFechaInscripcion($fechaInscripcion);
 		$this->setCostoFinal($costoFinal);
         $this->setObj_Ingresante($obj_Ingresante);
+		$this->setCol_Modulos($col_Modulos);
 	}
 
     public function getId_inscripcion(){
@@ -53,6 +56,13 @@ class Inscripcion{
 		return $this->obj_Ingresante=$obj_Ingresante;
 	}
 
+	public function getCol_Modulos(){
+		return $this->col_Modulos;
+	}
+	public function setCol_Modulos($col_Modulos){
+		return $this->col_Modulos=$col_Modulos;
+	}
+
     public function getMensajeOperacion(){
 		return $this->mensajeOperacion ;
 	}
@@ -70,11 +80,24 @@ class Inscripcion{
                     $this->setId_inscripcion($id_inscripcion);
 					$this->setFechaInscripcion($row2['fecha_inscripcion']);
 					$this->setCostoFinal($row2['costo_final']);
+					//------------------------------------------------Busqueda de Ingresante perteneciente a la inscripcion
                     $obj_Ingresante = new Ingresante();
 					$obj_Ingresante->buscar($row2['id_ingresante']);
+					//------------------------------------------------
                     if ($obj_Ingresante){    
                         $this->setObj_Ingresante($obj_Ingresante); //Setea el objeto Ingresante al objeto inscripcion
-                        $respuesta = $this; //Devuelve el objeto inscripcion
+						//--------------------------------------------------------------------------------------------
+						$col_Modulos = Modulo::listar("JOIN inscripcion-modulo im ON modulo.id_modulo = im.id_modulo
+														JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
+														WHERE i.id_inscripcion = ".$id_inscripcion);
+						if (is_array($col_Modulos)){
+							$this->setCol_Modulos($col_Modulos);//Setea la coleccion de modulos al objeto inscripcion
+						}else{
+							echo er."Error al listar modulos pertenecientes a una inscripcion al buscar una: ".$col_Modulos.f;
+						}
+						//---------------------------------------------------
+                        $respuesta = $this; //Devuelve el objeto inscripcion-
+						//---------------------------------------------------
                     }else{
                         $this->setMensajeOperacion($obj_Ingresante->getMensajeOperacion()); //Error al encontrar el objeto Ingresante correspondiente
 						$respuesta = false;
@@ -107,13 +130,24 @@ class Inscripcion{
 					$id_inscripcion =   $row2['id_inscripcion'];
 					$fechaInscripcion = $row2['fecha_inscripcion'];
                     $costoFinal = $row2['costo_final'];
+					//------------------------------------------------- Busqueda de Ingresante perteneciente a la inscripcion
                     $obj_Ingresante = new Ingresante();
 					$obj_Ingresante->buscar($row2['id_ingresante']);
-                    if ($obj_Ingresante){    
-                        $unaInscripcion = new Inscripcion();
-                        $unaInscripcion->cargar($id_inscripcion, $fechaInscripcion, $costoFinal, $obj_Ingresante);//Aqui se setea el objeto Ingresante a la inscripcion
-                        array_push($arregloinscripciones,$unaInscripcion);
-                        $respuesta = $arregloinscripciones; 
+					//-------------------------------------------------
+                    if ($obj_Ingresante){//                                                                     --- Busqueda de la coleccion de Modulos
+						$col_Modulos = Modulo::listar("JOIN `inscripcion-modulo` im ON modulo.id_modulo = im.id_modulo
+						JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
+						WHERE i.id_inscripcion = ".$id_inscripcion);
+						if (is_array($col_Modulos)){
+							$unaInscripcion = new Inscripcion();
+							$unaInscripcion->cargar($id_inscripcion, $fechaInscripcion, $costoFinal, $obj_Ingresante, $col_Modulos);//Aqui se setea el objeto Ingresante a la inscripcion
+							array_push($arregloinscripciones,$unaInscripcion);
+							//-------------------------------------------------------------------------
+							$respuesta = $arregloinscripciones;// Devuelve el arreglo de Inscripciones-
+							//-------------------------------------------------------------------------
+						}else{
+							echo er."Error al listar modulos pertenecientes a una inscripcion a listar inscripciones: ".$col_Modulos.f;
+						}
                     }else{
                         $respuesta = $obj_Ingresante->getMensajeOperacion(); //Error al encontrar el objeto Ingresante correspondiente
                     }
@@ -138,7 +172,21 @@ class Inscripcion{
 		if($base->Iniciar()){
 			if($id = $base->devuelveIDInsercion($consultaInsertar)){
                 $this->setId_inscripcion($id);
-				$respuesta = true;
+				$consultaInsertarModulos = "INSERT INTO `inscripcion-modulo` (`id_modulo`, `id_inscripcion`) VALUES ";
+				$col_Modulos = $this->getCol_Modulos();//Para este examen, nos aseguramos por interface que haya una coleccion de modulos antes de insertar la inscripcion.
+				foreach ($col_Modulos as $unModulo){
+					$consultaInsertarModulos.= "('".$unModulo->getId_Modulo()."', '".$this->getId_inscripcion()."'),";
+				}
+				$consultaInsertarModulos = substr($consultaInsertarModulos, 0, -1);//Quito la ultima coma
+				if($base->Ejecutar($consultaInsertarModulos)){
+					//--------------------
+					$respuesta = true;//--
+					//--------------------
+				}else{
+					$this->setMensajeOperacion("Error al insertar Modulos en Inscripcion: ".$base->getError());//Error insercion de modulos
+					//Si obtengo un error en esta ultima insercion. Se insertaran datos en la tabla inscripcion que estaran sin modulos deseados en la tabla inscripcion-modulo.
+					//En un proyecto profesional se debe tener en cuenta para revertir esta insercion
+				}
 			}else {
 				$this->setMensajeOperacion($base->getError());//Error Insercion
 			}
@@ -156,7 +204,27 @@ class Inscripcion{
 		$consultaModifica="UPDATE inscripcion SET fecha_inscripcion='".$this->getFechaInscripcion()."', costo_final='".$this->getCostoFinal()."', id_ingresante='".$id_Ingresante."' WHERE id_inscripcion=". $this->getId_inscripcion();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
-				$respuesta = true;				
+				$consultaBorrarModulos = "DELETE FROM `inscripcion-modulo` WHERE `id_inscripcion` = ".$this->getId_inscripcion().";";
+				$consultaModificarModulos = "INSERT INTO `inscripcion-modulo` (`id_modulo`, `id_inscripcion`) VALUES ";
+				$col_Modulos = $this->getCol_Modulos();//Para este examen, nos aseguramos por interface que haya una coleccion de modulos antes de insertar la inscripcion.
+				foreach ($col_Modulos as $unModulo){
+					$consultaModificarModulos.= "('".$unModulo->getId_Modulo()."', '".$this->getId_inscripcion()."'),";
+				}
+				$consultaModificarModulos = substr($consultaModificarModulos, 0, -1);//Quito la ultima coma
+				if($base->Ejecutar($consultaBorrarModulos)){
+					if($base->Ejecutar($consultaModificarModulos)){
+						//--------------------
+						$respuesta = true;//--
+						//--------------------
+					}else{
+						$this->setMensajeOperacion("Error al insertar nuevos Modulos en Modificar Inscripcion: ".$base->getError());//Error insercion de modulos
+					}
+				}else{
+					echo "--------------".$consultaModificarModulos."---------------";
+					$this->setMensajeOperacion("Error al borrar Modulos en Modificar Inscripcion: ".$base->getError());//Error borrado de modulos
+				}
+
+
 			}else{
 				$this->setMensajeOperacion($base->getError());//Error Ejecutar
 			}
@@ -171,9 +239,14 @@ class Inscripcion{
         $respuesta = false;
 		$base=new BaseDatos();
 		if($base->Iniciar()){
-			$consultaBorra="DELETE FROM inscripcion  WHERE id_inscripcion=". $this->getId_inscripcion();
-			if($base->Ejecutar($consultaBorra)){
-				$respuesta = true;
+			$consultaBorrarModulos = "DELETE FROM `inscripcion-modulo` WHERE `id_inscripcion` = ".$this->getId_inscripcion().";";
+			if($base->Ejecutar($consultaBorrarModulos)){
+				$consultaBorra="DELETE FROM inscripcion  WHERE id_inscripcion=". $this->getId_inscripcion();
+				if($base->Ejecutar($consultaBorra)){
+					$respuesta = true;
+				}else{
+					$this->setMensajeOperacion($base->getError());
+				}				
 			}else{
 				$this->setMensajeOperacion($base->getError());				
 			}

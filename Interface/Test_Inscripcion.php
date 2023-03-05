@@ -11,7 +11,17 @@ function insertarInscripcion(){
         $fechaInscripcion = trim(fgets(STDIN));
         echo " Ingrese Costo-test: ";
         $costoFinal = trim(fgets(STDIN));
-        $sePudoInsertar = $abmInscripcion->insertaInscripcion($fechaInscripcion, $costoFinal, $obj_Ingresante);
+        //-----------------------------------
+        $colModulos = array();
+        $otroModulo = "s";
+	    While ($otroModulo=="S" || $otroModulo=="s" ){
+            $moduloElegido = listaModulos();
+            array_push($colModulos, $moduloElegido);//----------Agrego cada modulo elegido Falta restringir segun consignas
+            echo o." Desea ingresar otro Modulo? S/s ".f."\n";
+		    $otroModulo = trim(fgets(STDIN));
+        }
+        //echo "Ha elegido ". $moduloElegido;// Deberian ser varios
+        $sePudoInsertar = $abmInscripcion->insertaInscripcion($fechaInscripcion, $costoFinal, $obj_Ingresante, $colModulos);
         if ($sePudoInsertar == "OK"){
             echo ok."La Inscripcion fue ingresada con exito".f."\n";
         }else{
@@ -22,7 +32,7 @@ function insertarInscripcion(){
 
 function listaInscripciones(){
     $abmInscripcion = new AbmInscripcion();
-    $col_Inscripciones = $abmInscripcion->listarActividades();
+    $col_Inscripciones = $abmInscripcion->listarInscripciones();
     if (is_array($col_Inscripciones)){
         $numero = 0;
         foreach($col_Inscripciones as $unaInscripcion){
@@ -39,19 +49,33 @@ function listaInscripciones(){
 }
 
 function modificarInscripcion(){
-	$abmInscripcion = new AbmInscripcion();
-    $inscripcionElegida = listaInscripciones();
-    echo "Ha elegido ". $inscripcionElegida;// Muestro la inscripcion elegida para orientacion del usuario
-    echo o." Ingrese una nueva descripcion corta: ".f;
-    $descripcion_corta = trim(fgets(STDIN));
-    echo o." Ingrese una nueva descripcion mas detallada: ".f;
-    $descripcion_larga = trim(fgets(STDIN));
-    $sePudoModificar = $abmInscripcion->modificarInscripcion($inscripcionElegida, $descripcion_corta, $descripcion_larga);
-    if ($sePudoModificar == "OK"){
-        echo ok." La inscripcion fue modificada con exito".f."\n";
-        echo $inscripcionElegida;
+    $obj_Ingresante = AbmInscripcion::$ingresanteLogueado;
+    if (is_null($obj_Ingresante)){
+        echo er."No estas logueado o no has elegido Ingresante.\nVe al Menu Ingresantes.\n".f;
     }else{
-        echo er."Error al modificar inscripcion: ".$sePudoModificar.f."\n";// Es un error
+        $abmInscripcion = new AbmInscripcion();
+        $inscripcionElegida = listaInscripciones();
+        echo " Ingrese una Fecha-test: ";
+        $fechaInscripcion = trim(fgets(STDIN));
+        echo " Ingrese Costo-test: ";
+        $costoFinal = trim(fgets(STDIN));
+        //-----------------------------------
+        $colModulos = array();
+        $otroModulo = "s";
+        While ($otroModulo=="S" || $otroModulo=="s" ){
+            $moduloElegido = listaModulos();
+            array_push($colModulos, $moduloElegido);//----------Agrego cada modulo elegido Falta restringir segun consignas
+            echo o." Desea ingresar otro Modulo? S/s ".f."\n";
+            $otroModulo = trim(fgets(STDIN));
+        }
+        //echo "Ha elegido ". $moduloElegido;// Deberian ser varios
+        $sePudoModificar = $abmInscripcion->modificarInscripcion($inscripcionElegida, $fechaInscripcion, $costoFinal, $obj_Ingresante, $colModulos);
+        if ($sePudoModificar == "OK"){
+            echo ok." La inscripcion fue modificada con exito".f."\n";
+            echo $inscripcionElegida;
+        }else{
+            echo er."Error al modificar inscripcion: ".$sePudoModificar.f."\n";// Es un error
+        }
     }
 }
 
