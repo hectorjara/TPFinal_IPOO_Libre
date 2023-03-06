@@ -57,6 +57,30 @@ class AbmModulo{
 		return $colInscripciones;
 	}
 
+	public function getInscripcionesDNI($moduloElegido, $ingresanteElegido){
+		$colInscripcionesDNI = array();
+		$colInscripciones = $moduloElegido->getCol_Inscripciones();
+		if (is_array($colInscripciones)){
+			$cant = 0;
+			foreach($colInscripciones as $unaInscripcion){
+				if ($unaInscripcion->getObj_Ingresante() == $ingresanteElegido){
+					array_push($colInscripcionesDNI, $unaInscripcion);
+					$cant = $cant +1;
+				}
+			}
+			if ($cant >= 2){
+			//------------------------------
+			return $colInscripcionesDNI;//---
+			//------------------------------
+			}else{
+				$respuesta = "NO";//Encontro solo 1 o nada
+				return $respuesta;
+			}
+		}else{
+			return $colInscripciones;//Retorna un error
+		}
+	}
+
     public function listarModulos($condicion=" WHERE id_modulo NOT IN (SELECT id_modulo FROM modulo_en_linea) "){
 		$col_Modulos = Modulo::listar($condicion);
 		return $col_Modulos;

@@ -118,6 +118,22 @@ function verInscripcionesAlModulo(){
     }
 }
 
+function verInscripcionesAlModuloDNI(){
+    $abmModulo = new AbmModulo();
+    $moduloElegido = listaModulos();
+    $ingresanteElegido = listaIngresantes();
+    $colInscripcionesDni = $abmModulo->getInscripcionesDNI($moduloElegido, $ingresanteElegido);
+    if (is_array($colInscripcionesDni)){
+        foreach($colInscripcionesDni as $unaInscripcion){
+            echo $unaInscripcion;
+        }
+    }elseif($colInscripcionesDni == "NO"){
+        echo n."No existen inscripciones a este modulo con el ingresante elegido mas de una vez".f."\n";
+    }else{
+        echo er."Error al obtener la coleccion de inscripciones segun Dni: ".$colInscripcionesDni.f."\n";
+    }
+}
+
 function mostrarAbmModulo(){
 	$sigue = "s";
 	While ($sigue=="S" || $sigue=="s" ){
@@ -128,8 +144,9 @@ function mostrarAbmModulo(){
         echo " 3 - Modificar un Modulo \n";
         echo " 4 - Eliminar un Modulo \n";
 		echo " 5 - Ver Inscripciones a un Modulo \n";
-        echo " 6 - Volver al menu principal \n";
-		echo " 7 - Salir \n";
+        echo " 6 - Ver 2 o mas Inscripciones a un Modulo con mismo DNI \n";
+        echo " 7 - Volver al menu principal \n";
+		echo " 8 - Salir \n";
 		$op = trim(fgets(STDIN));	
 		if ($op==1){
 			insertarModulo(false);//No en linea
@@ -146,10 +163,13 @@ function mostrarAbmModulo(){
         if ($op==5){
 			verInscripcionesAlModulo();
         }
-		if ($op==6){
+        if ($op==6){
+			verInscripcionesAlModuloDNI();
+        }
+		if ($op==7){
 			mostrarMenu();
 		}
-		if ($op==7){
+		if ($op==8){
 			exit;
 		}
 		echo o." Desea realizar otra operacion? S/s ".f."\n";
