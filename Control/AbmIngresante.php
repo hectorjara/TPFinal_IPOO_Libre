@@ -65,11 +65,11 @@ class AbmIngresante{
 			$colActividades = array();
 			foreach($colModulos as $unModulo){
 				$actividadDelModulo = $unModulo->getObj_Actividad();
-				//echo er.get_class($actividadDelModulo).f;
 				array_push($colActividades, $unModulo->getObj_Actividad());
 			}
+			$colActividadesUnicas = array_unique($colActividades);
 			//-------------------------
-			return $colActividades;//--
+			return $colActividadesUnicas;//--
 			//-------------------------
 		}elseif(empty($inscripcionesDelIngresante)){//Si es un arreglo, pero esta vacio
 			$respuesta = "NO_I";					//No tiene inscriipciones el ingresante

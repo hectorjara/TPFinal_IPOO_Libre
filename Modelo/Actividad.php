@@ -170,7 +170,7 @@ class Actividad{
 
 
 	public function __toString(){
-        $cadena = "Actividad:\n".
+        $cadena = "________\nActividad:\n".
                 "Descripcion:".$this->getDescripcion_corta()."\n".
                 "Descripcion Detallada: ".$this->getDescripcion_larga()."\n";
         return $cadena;

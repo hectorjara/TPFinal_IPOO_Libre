@@ -267,7 +267,7 @@ class Inscripcion{
 
 
 	public function __toString(){
-        $cadena = "Inscripcion:\n".
+        $cadena = "___________\nInscripcion:\n".
                 "Fecha :".$this->getFechaInscripcion()."\n".
                 "Costo Final: ".$this->getCostoFinal()."\n".
                 "Ingresante(Legajo): ".$this->getObj_Ingresante()->getLegajo()."\n";// <--------

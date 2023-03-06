@@ -44,7 +44,7 @@ function listaModulos(){
             foreach($col_ModulosEnLinea as $unModulo){
                 $numero = $numero +1;
                 array_push($numerosEnLinea, $numero);
-            echo o.$numero.f." ".$unModulo;// Elegir Modulo En Linea por numero
+            echo o."\n".$numero.f." ".$unModulo;// Elegir Modulo En Linea por numero
             }            
         }else{
             echo er."Error al listar Modulos En Linea: ".$col_ModulosEnLinea.f."\n";

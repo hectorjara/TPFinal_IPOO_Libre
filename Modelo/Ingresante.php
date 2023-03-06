@@ -197,7 +197,7 @@ class Ingresante{
 
 
 	public function __toString(){
-        $cadena = "ingresante:\n".
+        $cadena = "__________\ningresante:\n".
                 "Mail:".$this->getmail()."\n".
                 "Legajo:".$this->getLegajo()."\n".
                 "Dni:".$this->getDni()."\n".

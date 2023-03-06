@@ -219,7 +219,7 @@ class Modulo{
 
 
 	public function __toString(){
-        $cadena = "Modulo:\n".
+        $cadena = "______\nModulo:\n".
                 "Descripcion:".$this->getDescripcion()."\n".
                 "Tope: ".$this->getTope_Inscripcion()."\n".
                 "Costo: ".$this->getCosto()."\n".
