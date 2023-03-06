@@ -44,5 +44,27 @@ class AbmActividad{
 		$col_Actividades = Actividad::listar($condicion);
 		return $col_Actividades;
     }
+
+	public function getInscripciones($actividadElegida){
+		$coleccion = array();
+		$abmModulo = new AbmModulo();
+		$modulosP = $abmModulo->listarModulos();
+		$modulosEL = $abmModulo->listarModulosEnLinea();
+		$colModulos = array_merge($modulosP, $modulosEL);
+		if (is_array($colModulos)){		
+			foreach($colModulos as $unModulo){
+				if ($unModulo->getObj_Actividad() == $actividadElegida){
+					$col_Ins_UnModulo = $abmModulo->getInscripciones($unModulo);
+					$colInscripciones = array_merge($coleccion, $col_Ins_UnModulo);
+				}
+			}
+			//---------------------------
+			return $colInscripciones;//--
+			//---------------------------
+		}else{
+			return $colModulos;//Retorna el error y no un array.
+		} 
+		
+	}
 }
 ?>

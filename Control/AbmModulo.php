@@ -52,6 +52,11 @@ class AbmModulo{
         return $respuesta;
 	}
 
+	public function getInscripciones($moduloElegido){
+		$colInscripciones = $moduloElegido->getCol_Inscripciones();
+		return $colInscripciones;
+	}
+
     public function listarModulos($condicion=" WHERE id_modulo NOT IN (SELECT id_modulo FROM modulo_en_linea) "){
 		$col_Modulos = Modulo::listar($condicion);
 		return $col_Modulos;

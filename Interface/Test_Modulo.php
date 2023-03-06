@@ -108,7 +108,7 @@ function eliminarModulo(){
 function verInscripcionesAlModulo(){
     $abmModulo = new AbmModulo();
     $moduloElegido = listaModulos();
-    $colInscripciones = $moduloElegido->getCol_Inscripciones();
+    $colInscripciones = $abmModulo->getInscripciones($moduloElegido);
     if (is_array($colInscripciones)){
         foreach($colInscripciones as $unaInscripcion){
             echo $unaInscripcion;

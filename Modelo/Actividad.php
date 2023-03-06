@@ -7,6 +7,7 @@ class Actividad{
     private $id_actividad;
 	private $descripcion_corta;
 	private $descripcion_larga;
+	private $colModulos;
     private $mensajeOperacion;
 
 	//metodos
@@ -14,6 +15,7 @@ class Actividad{
         $this->id_actividad = 0;
 		$this->descripcion_corta= "";
 		$this->descripcion_larga= "";
+		$this->colModulos = [];
 	}
 
 	public function cargar($id_actividad, $descripcion_corta,$descripcion_larga){
@@ -43,8 +45,15 @@ class Actividad{
 		return $this->descripcion_larga=$descripcion_larga;
 	}
 
+	public function getColModulos(){
+		return $this->colModulos;
+	}
+	public function setColModulos($colModulos){
+		return $this->colModulos=$colModulos;
+	}
+
     public function getMensajeOperacion(){
-		return $this->mensajeOperacion ;
+		return $this->mensajeOperacion;
 	}
 	public function setMensajeOperacion($mensajeOperacion){
 		$this->mensajeOperacion=$mensajeOperacion;

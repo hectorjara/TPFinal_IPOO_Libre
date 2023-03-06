@@ -62,6 +62,20 @@ function eliminarActividad(){
     }
 }
 
+function verInscripciones(){
+    $actividadElegida = listaActividades();
+    $abmActividad = new AbmActividad();
+    $colInscripciones = $abmActividad->getInscripciones($actividadElegida);
+    if (is_array($colInscripciones)){
+        foreach($colInscripciones as $unaInscripcion){
+            echo $unaInscripcion;
+        }
+    }else{
+        echo er."Error al obtener la coleccion de inscripciones de una Actividad: ".$colInscripciones.f."\n";
+    }
+
+}
+
 function mostrarAbmActividad(){
 	$sigue = "s";
 	While ($sigue=="S" || $sigue=="s" ){
@@ -70,7 +84,8 @@ function mostrarAbmActividad(){
 		echo " 1 - Ingresar nueva Actividad \n";
 		echo " 2 - Modificar una Actividad \n";
         echo " 3 - Eliminar una Actividad \n";
-		echo " 5 - Volver al menu principal \n";
+        echo " 4 - Ver Inscripciones a una Actividad \n";
+		echo " 6 - Volver al menu principal \n";
 		echo " 7 - Salir \n";
 		$op = trim(fgets(STDIN));	
 		if ($op==1){
@@ -82,7 +97,10 @@ function mostrarAbmActividad(){
         if ($op==3){
 			eliminarActividad();
         }
-		if ($op==5){
+        if ($op==4){
+			verInscripciones();
+        }
+		if ($op==6){
 			mostrarMenu();
 		}
 		if ($op==7){
