@@ -67,7 +67,10 @@ class Modulo{
 	}
 
 	public function getCol_Inscripciones(){
-		return $this->col_Inscripciones;
+		$colInscripciones = Inscripcion::listar("JOIN `inscripcion-modulo` im ON inscripcion.id_inscripcion = im.id_inscripcion
+						JOIN modulo m ON im.id_modulo = m.id_modulo
+						WHERE m.id_modulo = ".$this->getId_Modulo());
+		return $colInscripciones;//Retorna o el arreglo o el error.
 	}
 	public function setCol_Inscripciones($col_Inscripciones){
 		return $this->col_Inscripciones=$col_Inscripciones;
@@ -147,6 +150,9 @@ class Modulo{
             $respuesta = $base->getError();//Error Iniciar
 		}
         $base->Cerrar();
+		if ($respuesta == null){
+			$respuesta = array();//Retorna un arreglo vacio
+		}
 		return $respuesta;
 	}
 

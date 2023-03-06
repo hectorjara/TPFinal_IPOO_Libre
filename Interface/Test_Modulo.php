@@ -95,14 +95,27 @@ function modificarModulo(){
 
 function eliminarModulo(){
 	$abmModulo = new AbmModulo();
-        $moduloElegido = listaModulos();
-        echo "Ha elegido ". $moduloElegido;// Muestro el modulo elegido para orientacion del usuario
-        $sePudoEliminar = $abmModulo->eliminarModulo($moduloElegido);
-        if ($sePudoEliminar == "OK"){
-            echo ok." El modulo fue eliminado con exito".f."\n";
-        }else{
-            echo er."Error al eliminar: ".$sePudoEliminar.f."\n";
+    $moduloElegido = listaModulos();
+    echo "Ha elegido ". $moduloElegido;// Muestro el modulo elegido para orientacion del usuario
+    $sePudoEliminar = $abmModulo->eliminarModulo($moduloElegido);
+    if ($sePudoEliminar == "OK"){
+        echo ok." El modulo fue eliminado con exito".f."\n";
+    }else{
+        echo er."Error al eliminar: ".$sePudoEliminar.f."\n";
+    }
+}
+
+function verInscripcionesAlModulo(){
+    $abmModulo = new AbmModulo();
+    $moduloElegido = listaModulos();
+    $colInscripciones = $moduloElegido->getCol_Inscripciones();
+    if (is_array($colInscripciones)){
+        foreach($colInscripciones as $unaInscripcion){
+            echo $unaInscripcion;
         }
+    }else{
+        echo er."Error al obtener la coleccion de inscripciones: ".$colInscripciones.f."\n";
+    }
 }
 
 function mostrarAbmModulo(){
@@ -114,7 +127,8 @@ function mostrarAbmModulo(){
 		echo " 2 - Ingresar nuevo Modulo en Linea \n";
         echo " 3 - Modificar un Modulo \n";
         echo " 4 - Eliminar un Modulo \n";
-		echo " 5 - Volver al menu principal \n";
+		echo " 5 - Ver Inscripciones a un Modulo \n";
+        echo " 6 - Volver al menu principal \n";
 		echo " 7 - Salir \n";
 		$op = trim(fgets(STDIN));	
 		if ($op==1){
@@ -129,7 +143,10 @@ function mostrarAbmModulo(){
         if ($op==4){
 			eliminarModulo();
         }
-		if ($op==5){
+        if ($op==5){
+			verInscripcionesAlModulo();
+        }
+		if ($op==6){
 			mostrarMenu();
 		}
 		if ($op==7){

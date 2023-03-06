@@ -65,9 +65,9 @@ class ModuloEnLinea extends Modulo{
 		$base=new BaseDatos(); 
 		$consultaModulosOL="Select * from modulo_en_linea ";
 		if ($condicion!=""){
-			$consultaModulosOL.=' where '.$condicion;
+			$consultaModulosOL.=$condicion;
 		}
-		$consultaModulosOL.=" order by id_modulo ";
+		$consultaModulosOL.=" order by modulo_en_linea.id_modulo ";
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModulosOL)){
 				while($row2=$base->Registro()){
@@ -96,6 +96,9 @@ class ModuloEnLinea extends Modulo{
             $respuesta = $base->getError();//Error Iniciar
 		}
         $base->Cerrar();
+        if ($respuesta == null){
+			$respuesta = array();//Retorna el arreglo vacio
+		}
 		return $respuesta;
 	}
 

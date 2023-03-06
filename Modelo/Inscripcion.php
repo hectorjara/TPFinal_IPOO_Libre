@@ -44,8 +44,12 @@ class Inscripcion{
 	public function getCostoFinal(){
 		$costoFinal = 0;
 		$col_Modulos= $this->getCol_Modulos();
-		foreach($col_Modulos as $unModulo){
-			$costoFinal = $costoFinal + $unModulo->darCostoModulo();
+		if(is_array($col_Modulos)){
+			foreach($col_Modulos as $unModulo){
+				$costoFinal = $costoFinal + $unModulo->darCostoModulo();
+			}
+		}else{
+			echo er."Error al listar modulos presenciales o en linea en inscripcion. Uno de los parametros no sera un arreglo. Sino un error devuelto. Revisar.".f;
 		}
 		return $costoFinal;
 	}
@@ -61,7 +65,25 @@ class Inscripcion{
 	}
 
 	public function getCol_Modulos(){
-		return $this->col_Modulos;
+		$colModulosPresenciales = Modulo::listar("JOIN `inscripcion-modulo` im ON modulo.id_modulo = im.id_modulo
+			JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
+			WHERE i.id_inscripcion = ".$this->getId_inscripcion()." AND
+			modulo.id_modulo NOT IN (SELECT modulo_en_linea.id_modulo FROM modulo_en_linea) ");
+		$colModulosEnLinea = ModuloEnLinea::listar("JOIN `inscripcion-modulo` im ON modulo_en_linea.id_modulo = im.id_modulo
+			JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
+			WHERE i.id_inscripcion = ".$this->getId_inscripcion());
+		if(is_array($colModulosPresenciales) && is_array($colModulosEnLinea)){
+			$colModulos = array_merge($colModulosPresenciales, $colModulosEnLinea);//Uno los dos arreglos y los devuelvo
+			//--------------------
+			return $colModulos;//-
+			//--------------------
+		}else{//---------------------------------Si alguno de los dos no es arreglo, entonces es un error y lo devuelvo.
+			if(is_array($colModulosPresenciales)){
+				return $colModulosEnLinea;
+			}else{
+				return $colModulosPresenciales;
+			}
+		}
 	}
 	public function setCol_Modulos($col_Modulos){
 		return $this->col_Modulos=$col_Modulos;
@@ -89,15 +111,6 @@ class Inscripcion{
 					//------------------------------------------------
                     if ($obj_Ingresante){    
                         $this->setObj_Ingresante($obj_Ingresante); //Setea el objeto Ingresante al objeto inscripcion
-						//--------------------------------------------------------------------------------------------
-						$col_Modulos = Modulo::listar("JOIN inscripcion-modulo im ON modulo.id_modulo = im.id_modulo
-														JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
-														WHERE i.id_inscripcion = ".$id_inscripcion);
-						if (is_array($col_Modulos)){
-							$this->setCol_Modulos($col_Modulos);//Setea la coleccion de modulos al objeto inscripcion
-						}else{
-							echo er."Error al listar modulos pertenecientes a una inscripcion al buscar una: ".$col_Modulos.f;
-						}
 						//---------------------------------------------------
                         $respuesta = $this; //Devuelve el objeto inscripcion-
 						//---------------------------------------------------
@@ -124,9 +137,9 @@ class Inscripcion{
 		$base=new BaseDatos(); 
 		$consultainscripciones="Select * from inscripcion ";
 		if ($condicion!=""){
-			$consultainscripciones.=' where '.$condicion;
+			$consultainscripciones.= $condicion;
 		}
-		$consultainscripciones.=" order by id_inscripcion ";
+		$consultainscripciones.=" order by inscripcion.id_inscripcion ";
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultainscripciones)){
 				while($row2=$base->Registro()){
@@ -136,20 +149,13 @@ class Inscripcion{
                     $obj_Ingresante = new Ingresante();
 					$obj_Ingresante->buscar($row2['id_ingresante']);
 					//-------------------------------------------------
-                    if ($obj_Ingresante){//                                                                     --- Busqueda de la coleccion de Modulos
-						$col_Modulos = Modulo::listar("JOIN `inscripcion-modulo` im ON modulo.id_modulo = im.id_modulo
-						JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
-						WHERE i.id_inscripcion = ".$id_inscripcion);
-						if (is_array($col_Modulos)){
-							$unaInscripcion = new Inscripcion();
-							$unaInscripcion->cargar($id_inscripcion, $fechaInscripcion, $obj_Ingresante, $col_Modulos);//Aqui se setea el objeto Ingresante a la inscripcion
-							array_push($arregloinscripciones,$unaInscripcion);
-							//-------------------------------------------------------------------------
-							$respuesta = $arregloinscripciones;// Devuelve el arreglo de Inscripciones-
-							//-------------------------------------------------------------------------
-						}else{
-							$respuesta = er."Error al listar modulos pertenecientes a una inscripcion a listar inscripciones: ".$col_Modulos.f;
-						}
+                    if ($obj_Ingresante){
+						$unaInscripcion = new Inscripcion();
+						$unaInscripcion->cargar($id_inscripcion, $fechaInscripcion, $obj_Ingresante, []);//Aqui se setea el objeto Ingresante a la inscripcion
+						array_push($arregloinscripciones,$unaInscripcion);
+						//-------------------------------------------------------------------------
+						$respuesta = $arregloinscripciones;// Devuelve el arreglo de Inscripciones-
+						//-------------------------------------------------------------------------
                     }else{
                         $respuesta = $obj_Ingresante->getMensajeOperacion(); //Error al encontrar el objeto Ingresante correspondiente
                     }
