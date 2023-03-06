@@ -118,8 +118,8 @@ function mostrarAbmInscripcion(){
 		echo " 2 - Modificar una Inscripcion \n";
         echo " 3 - Eliminar una Inscripcion \n";
         echo " 4 - Visualizar todas las Inscripciones \n";
-		echo " 5 - Volver al menu principal \n";
-		echo " 7 - Salir \n";
+		echo " 7 - Volver al menu principal \n";
+		echo " 8 - Salir \n";
 		$op = trim(fgets(STDIN));	
 		if ($op==1){
 			insertarInscripcion();	
@@ -133,10 +133,10 @@ function mostrarAbmInscripcion(){
         if ($op==4){
 			visualizarInscripciones();
         }
-		if ($op==5){
+		if ($op==7){
 			mostrarMenu();
 		}
-		if ($op==7){
+		if ($op==8){
 			exit;
 		}
 		echo o." Desea realizar otra operacion? S/s ".f."\n";

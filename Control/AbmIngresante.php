@@ -47,5 +47,36 @@ class AbmIngresante{
 		$col_Ingresantes = Ingresante::listar($condicion);
 		return $col_Ingresantes;
     }
+
+	public function verActividades($ingresanteElegido){
+		$colModulos = array();
+		$abmInscripcion = new AbmInscripcion();
+		$condicionListarConID = " WHERE inscripcion.id_ingresante = ".$ingresanteElegido->getId_ingresante();
+		$inscripcionesDelIngresante = $abmInscripcion->listarInscripciones($condicionListarConID);
+		If (is_array($inscripcionesDelIngresante)){
+			foreach($inscripcionesDelIngresante as $unaInscripcion){
+				$colModulosDeInscripcion = $unaInscripcion->getCol_Modulos();
+				if (is_array($colModulosDeInscripcion)){
+					$colModulos = array_merge($colModulos, $colModulosDeInscripcion);
+				}else{
+					return $colModulosDeInscripcion;//Retorna un error
+				}
+			}
+			$colActividades = array();
+			foreach($colModulos as $unModulo){
+				$actividadDelModulo = $unModulo->getObj_Actividad();
+				//echo er.get_class($actividadDelModulo).f;
+				array_push($colActividades, $unModulo->getObj_Actividad());
+			}
+			//-------------------------
+			return $colActividades;//--
+			//-------------------------
+		}elseif(empty($inscripcionesDelIngresante)){//Si es un arreglo, pero esta vacio
+			$respuesta = "NO_I";					//No tiene inscriipciones el ingresante
+			return $respuesta;
+		}else{
+			return $inscripcionesDelIngresante;//Retorna un error
+		}
+	}
 }
 ?>

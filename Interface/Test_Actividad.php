@@ -85,8 +85,8 @@ function mostrarAbmActividad(){
 		echo " 2 - Modificar una Actividad \n";
         echo " 3 - Eliminar una Actividad \n";
         echo " 4 - Ver Inscripciones a una Actividad \n";
-		echo " 6 - Volver al menu principal \n";
-		echo " 7 - Salir \n";
+		echo " 7 - Volver al menu principal \n";
+		echo " 8 - Salir \n";
 		$op = trim(fgets(STDIN));	
 		if ($op==1){
 			insertarActividad();	
@@ -100,10 +100,10 @@ function mostrarAbmActividad(){
         if ($op==4){
 			verInscripciones();
         }
-		if ($op==6){
+		if ($op==7){
 			mostrarMenu();
 		}
-		if ($op==7){
+		if ($op==8){
 			exit;
 		}
 		echo o." Desea realizar otra operacion? S/s ".f."\n";

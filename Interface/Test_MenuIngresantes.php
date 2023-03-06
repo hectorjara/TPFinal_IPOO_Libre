@@ -80,6 +80,21 @@ function eliminarIngresante(){
     }
 }
 
+function verActividades(){
+    $abmIngresante = new AbmIngresante();
+    $ingresanteElegido = listaIngresantes();
+    $colActividades = $abmIngresante->verActividades($ingresanteElegido);
+    if (is_array($colActividades)){
+        foreach($colActividades as $unaActividad){
+            echo $unaActividad;
+        }
+    }elseif($colActividades == "NO_I"){
+        echo "El ingresante no tiene inscripciones\n";
+    }else{
+        echo er."Error al ver actividades: ".$colActividades.f;
+    }
+}
+
 function mostrarMenuIngresantes(){
 	$sigue = "s";
 	While ($sigue=="S" || $sigue=="s" ){
@@ -87,9 +102,9 @@ function mostrarMenuIngresantes(){
 		echo o." Eliga una opcion: ".f."\n";
 		echo " 1 - Login Ingresante \n";
 		echo " 2 - Registro Nuevo Ingresante \n";
-        echo " 3 - Ver.... \n";
-		echo " 5 - Volver al menu principal \n";
-		echo " 7 - Salir \n";
+        echo " 3 - Ver Actividades de un Ingresante \n";
+		echo " 7 - Volver al menu principal \n";
+		echo " 8 - Salir \n";
 		$op = trim(fgets(STDIN));	
 		if ($op==1){
 			loginIngresante();	
@@ -98,12 +113,12 @@ function mostrarMenuIngresantes(){
 			registroIngresante();
         }
         if ($op==3){
-			nada();
+			verActividades();
         }
-		if ($op==5){
+		if ($op==7){
 			mostrarMenu();
 		}
-		if ($op==7){
+		if ($op==8){
 			exit;
 		}
 		echo o." Desea realizar otra operacion? S/s ".f."\n";

@@ -23,7 +23,7 @@ function mostrarMenu(){
 		echo " 4 - Menu Ingresantes \n";
 		echo " 5 - Llenar Datos por defecto \n"; 
 		echo " 6 - Limpiar la Base de Datos \n";
-		echo " 7 - Salir \n";
+		echo " 8 - Salir \n";
 		$op = trim(fgets(STDIN));
 		
 		if ($op==1){
