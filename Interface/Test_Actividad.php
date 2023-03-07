@@ -7,11 +7,12 @@ function insertarActividad(){
 	$descripcion_corta = trim(fgets(STDIN));
 	echo " Ingrese una descripcion mas detallada: ";
 	$descripcion_larga = trim(fgets(STDIN));
-	$sePudoInsertar = $abmActividad->insertaActividad($descripcion_corta, $descripcion_larga);
-	if ($sePudoInsertar == "OK"){
+	$actividadInsertada = $abmActividad->insertaActividad($descripcion_corta, $descripcion_larga);
+	if ($actividadInsertada instanceof Actividad){
+        echo $actividadInsertada;
         echo ok."La actividad fue ingresada con exito".f."\n";
     }else{
-        echo er."Error al insertar: ".$sePudoInsertar.f."\n";
+        echo er."Error al insertar: ".$actividadInsertada.f."\n";
     }
 }
 
@@ -66,14 +67,16 @@ function verInscripciones(){
     $actividadElegida = listaActividades();
     $abmActividad = new AbmActividad();
     $colInscripciones = $abmActividad->getInscripciones($actividadElegida);
-    if (is_array($colInscripciones)){
+    if(is_array($colInscripciones)){
         foreach($colInscripciones as $unaInscripcion){
             echo $unaInscripcion;
+        }
+        if(empty($colInscripciones)){
+            echo d."No existen inscripciones para la Actividad".f."\n";
         }
     }else{
         echo er."Error al obtener la coleccion de inscripciones de una Actividad: ".$colInscripciones.f."\n";
     }
-
 }
 
 function mostrarAbmActividad(){

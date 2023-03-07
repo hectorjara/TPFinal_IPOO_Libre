@@ -13,11 +13,12 @@ function registroIngresante(){
 	$nombre = trim(fgets(STDIN));
     echo o." Ingresa tu Apellido: ".f;
 	$apellido = trim(fgets(STDIN));
-	$sePudoInsertar = $abmIngresante->insertaIngresante($mail, $legajo, $dni, $nombre, $apellido);
-	if ($sePudoInsertar == "OK"){
+	$ingresanteRegistrado = $abmIngresante->insertaIngresante($mail, $legajo, $dni, $nombre, $apellido);
+	if ($ingresanteRegistrado instanceof Ingresante){
         echo ok."Tu registro fue exitoso".f."\n";
+        echo $ingresanteRegistrado;
     }else{
-        echo er."Error al insertar: ".$sePudoInsertar.f."\n";
+        echo er."Error al insertar: ".$ingresanteRegistrado.f."\n";
     }
 }
 
@@ -40,9 +41,13 @@ function listaIngresantes(){
 }
 
 function loginIngresante(){
-    $IngresanteActual = listaIngresantes();
-    AbmInscripcion::$ingresanteLogueado = $IngresanteActual;
-    echo ok."Ya te encuentras logueado\n".f;
+    $ingresanteActual = listaIngresantes();
+    if(empty($ingresanteActual)){
+        echo er."No hay nadie registrado.\nVe a Registrar nuevo Ingresante\n".f;
+    }else{
+        AbmInscripcion::$ingresanteLogueado = $ingresanteActual;
+        echo ok."Ya te encuentras logueado\n".f;
+    }
 }
 
 function modificarIngresante(){
@@ -101,7 +106,7 @@ function mostrarMenuIngresantes(){
 		echo t." ------- Ingresantes -------- ".f."\n";
 		echo o." Eliga una opcion: ".f."\n";
 		echo " 1 - Login Ingresante \n";
-		echo " 2 - Registro Nuevo Ingresante \n";
+		echo " 2 - Registrar Nuevo Ingresante \n";
         echo " 3 - Ver Actividades de un Ingresante \n";
 		echo " 7 - Volver al menu principal \n";
 		echo " 8 - Salir \n";

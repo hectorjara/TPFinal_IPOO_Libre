@@ -182,7 +182,7 @@ class Modulo{
 					$obj_Actividad->buscar($row2['id_actividad']);
                     if ($obj_Actividad){    
                         $unModulo = new Modulo();
-                        $unModulo->cargar($id_modulo, $descripcion, $tope_inscripcion, $costo, $obj_Actividad);//Aqui se setea el objeto Actividad al Modulo
+                        $unModulo->cargar($id_modulo, $descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad);//Aqui se setea el objeto Actividad al Modulo
                         array_push($arregloModulos,$unModulo);
                         $respuesta = $arregloModulos; 
                     }else{
@@ -204,7 +204,6 @@ class Modulo{
 
 
 	public function insertar(){
-        $respuesta = false;
 		$base=new BaseDatos();
         $id_actividad = $this->getObj_Actividad()->getId_Actividad();
 		$consultaInsertar="INSERT INTO modulo( descripcion, tope_inscripcion, costo, fecha_inicio, fecha_fin, Hora_inicio, hora_cierre, id_actividad) 
@@ -212,15 +211,16 @@ class Modulo{
 		if($base->Iniciar()){
 			if($id = $base->devuelveIDInsercion($consultaInsertar)){
                 $this->setId_Modulo($id);
-				$respuesta = true;
+				$base->Cerrar();
+				//---------------
+				return $this;//--
+				//---------------
 			}else {
 				$this->setMensajeOperacion($base->getError());//Error Insercion
 			}
 		} else {
 			$this->setMensajeOperacion($base->getError());//Error Iniciar
 		}
-        $base->Cerrar();
-        return $respuesta;
 	}
 
 	public function modificar(){

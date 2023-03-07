@@ -43,7 +43,7 @@ class Inscripcion{
 
 	public function getCostoFinal(){
 		$costoFinal = 0;
-		$col_Modulos= $this->getCol_Modulos();
+		$col_Modulos= $this->getCol_Modulos_BDatos();
 		if(is_array($col_Modulos)){
 			foreach($col_Modulos as $unModulo){
 				$costoFinal = $costoFinal + $unModulo->darCostoModulo();
@@ -65,25 +65,7 @@ class Inscripcion{
 	}
 
 	public function getCol_Modulos(){
-		$colModulosPresenciales = Modulo::listar("JOIN `inscripcion-modulo` im ON modulo.id_modulo = im.id_modulo
-			JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
-			WHERE i.id_inscripcion = ".$this->getId_inscripcion()." AND
-			modulo.id_modulo NOT IN (SELECT modulo_en_linea.id_modulo FROM modulo_en_linea) ");
-		$colModulosEnLinea = ModuloEnLinea::listar("JOIN `inscripcion-modulo` im ON modulo_en_linea.id_modulo = im.id_modulo
-			JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
-			WHERE i.id_inscripcion = ".$this->getId_inscripcion());
-		if(is_array($colModulosPresenciales) && is_array($colModulosEnLinea)){
-			$colModulos = array_merge($colModulosPresenciales, $colModulosEnLinea);//Uno los dos arreglos y los devuelvo
-			//--------------------
-			return $colModulos;//-
-			//--------------------
-		}else{//---------------------------------Si alguno de los dos no es arreglo, entonces es un error y lo devuelvo.
-			if(is_array($colModulosPresenciales)){
-				return $colModulosEnLinea;
-			}else{
-				return $colModulosPresenciales;
-			}
-		}
+		return $this->col_Modulos;
 	}
 	public function setCol_Modulos($col_Modulos){
 		return $this->col_Modulos=$col_Modulos;
@@ -167,6 +149,9 @@ class Inscripcion{
             $respuesta = $base->getError();//Error Iniciar
 		}
         $base->Cerrar();
+		if ($respuesta == null){
+			$respuesta = array();//Retorna un arreglo vacio
+		}
 		return $respuesta;
 	}
 
@@ -191,6 +176,7 @@ class Inscripcion{
 					$respuesta = true;//--
 					//--------------------
 				}else{
+					echo $consultaInsertarModulos;
 					$this->setMensajeOperacion("Error al insertar Modulos en Inscripcion: ".$base->getError());//Error insercion de modulos
 					//Si obtengo un error en esta ultima insercion. Se insertaran datos en la tabla inscripcion que estaran sin modulos deseados en la tabla inscripcion-modulo.
 					//En un proyecto profesional se debe tener en cuenta para revertir esta insercion
@@ -228,7 +214,6 @@ class Inscripcion{
 						$this->setMensajeOperacion("Error al insertar nuevos Modulos en Modificar Inscripcion: ".$base->getError());//Error insercion de modulos
 					}
 				}else{
-					echo "--------------".$consultaModificarModulos."---------------";
 					$this->setMensajeOperacion("Error al borrar Modulos en Modificar Inscripcion: ".$base->getError());//Error borrado de modulos
 				}
 
@@ -264,7 +249,28 @@ class Inscripcion{
         $base->Cerrar();
         return $respuesta;
 	}
-
+	
+	public function getCol_Modulos_BDatos(){
+		$colModulosPresenciales = Modulo::listar("JOIN `inscripcion-modulo` im ON modulo.id_modulo = im.id_modulo
+			JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
+			WHERE i.id_inscripcion = ".$this->getId_inscripcion()." AND
+			modulo.id_modulo NOT IN (SELECT modulo_en_linea.id_modulo FROM modulo_en_linea) ");
+		$colModulosEnLinea = ModuloEnLinea::listar("JOIN `inscripcion-modulo` im ON modulo_en_linea.id_modulo = im.id_modulo
+			JOIN inscripcion i ON im.id_inscripcion = i.id_inscripcion
+			WHERE i.id_inscripcion = ".$this->getId_inscripcion());
+		if(is_array($colModulosPresenciales) && is_array($colModulosEnLinea)){
+			$colModulos = array_merge($colModulosPresenciales, $colModulosEnLinea);//Uno los dos arreglos y los devuelvo
+			//--------------------
+			return $colModulos;//-
+			//--------------------
+		}else{//---------------------------------Si alguno de los dos no es arreglo, entonces es un error y lo devuelvo.
+			if(is_array($colModulosPresenciales)){
+				return $colModulosEnLinea;
+			}else{
+				return $colModulosPresenciales;
+			}
+		}
+	}
 
 	public function __toString(){
         $cadena = "___________\nInscripcion:\n".

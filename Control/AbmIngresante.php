@@ -4,16 +4,13 @@ include_once '../Modelo/Ingresante.php';
 class AbmIngresante{
 
 	public function insertaIngresante($mail, $legajo, $dni, $nombre, $apellido){
-        $respuesta = null;
 		$unIngresante = new Ingresante();
         $unIngresante->cargar(null, $mail, $legajo, $dni, $nombre, $apellido);// null va a cambiar por el $id que devuelva la insercion
-		$sePudoInsertar = $unIngresante->insertar();
-		if ($sePudoInsertar){
-			$respuesta = "OK";	
+		if ($unIngresante->insertar()){
+			return $unIngresante;	
 		}else{
-            $respuesta = $unIngresante->getMensajeOperacion();
+            return $unIngresante->getMensajeOperacion();
 		}
-        return $respuesta;
 	}
 
 	public function modificarIngresante($obj_Ingresante, $mail, $legajo, $dni, $nombre, $apellido){
@@ -54,8 +51,12 @@ class AbmIngresante{
 		$condicionListarConID = " WHERE inscripcion.id_ingresante = ".$ingresanteElegido->getId_ingresante();
 		$inscripcionesDelIngresante = $abmInscripcion->listarInscripciones($condicionListarConID);
 		If (is_array($inscripcionesDelIngresante)){
+			if(empty($inscripcionesDelIngresante)){//Si es un arreglo, pero esta vacio
+				$respuesta = "NO_I";					//No tiene inscriipciones el ingresante
+				return $respuesta;
+			}
 			foreach($inscripcionesDelIngresante as $unaInscripcion){
-				$colModulosDeInscripcion = $unaInscripcion->getCol_Modulos();
+				$colModulosDeInscripcion = $unaInscripcion->getCol_Modulos_BDatos();
 				if (is_array($colModulosDeInscripcion)){
 					$colModulos = array_merge($colModulos, $colModulosDeInscripcion);
 				}else{
@@ -71,9 +72,6 @@ class AbmIngresante{
 			//-------------------------
 			return $colActividadesUnicas;//--
 			//-------------------------
-		}elseif(empty($inscripcionesDelIngresante)){//Si es un arreglo, pero esta vacio
-			$respuesta = "NO_I";					//No tiene inscriipciones el ingresante
-			return $respuesta;
 		}else{
 			return $inscripcionesDelIngresante;//Retorna un error
 		}

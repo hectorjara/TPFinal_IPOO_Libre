@@ -55,6 +55,9 @@ function visualizarInscripciones(){
     $abmInscripcion = new AbmInscripcion();
     $col_Inscripciones = $abmInscripcion->listarInscripciones();
     if (is_array($col_Inscripciones)){
+        if(empty($col_Inscripciones)){
+            echo d."No existen inscripciones".f."\n";
+        }
         foreach($col_Inscripciones as $unaInscripcion){
             echo $unaInscripcion;
         }

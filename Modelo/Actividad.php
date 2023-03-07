@@ -116,22 +116,22 @@ class Actividad{
 
 
 	public function insertar(){
-        $respuesta = false;
 		$base=new BaseDatos();
 		$consultaInsertar="INSERT INTO actividad( descripcion_corta, descripcion_larga) 
 				VALUES ('".$this->getDescripcion_corta()."' , '".$this->getDescripcion_larga()."')";
 		if($base->Iniciar()){	
 			if($id = $base->devuelveIDInsercion($consultaInsertar)){
                 $this->setId_Actividad($id);
-				$respuesta = true;
+				$base->Cerrar();
+				//---------------------
+				return $this;//--
+				//---------------------
 			}else {
 				$this->setMensajeOperacion($base->getError());//Error Insercion
 			}
 		} else {
 			$this->setMensajeOperacion($base->getError());//Error Iniciar
 		}
-        $base->Cerrar();
-        return $respuesta;
 	}
 
 	public function modificar(){

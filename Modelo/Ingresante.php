@@ -143,22 +143,20 @@ class Ingresante{
 
 
 	public function insertar(){
-        $respuesta = false;
 		$base=new BaseDatos();
 		$consultaInsertar="INSERT INTO ingresante( mail, legajo, dni, nombre, apellido) 
 				VALUES ('".$this->getmail()."' , '".$this->getLegajo()."' , '".$this->getDni()."' , '".$this->getNombre()."' , '".$this->getApellido()."')";
 		if($base->Iniciar()){	
 			if($id = $base->devuelveIDInsercion($consultaInsertar)){
+				$base->Cerrar();
                 $this->setId_ingresante($id);
-				$respuesta = true;
+				return $this;
 			}else {
 				$this->setMensajeOperacion($base->getError());//Error Insercion
 			}
 		} else {
 			$this->setMensajeOperacion($base->getError());//Error Iniciar
 		}
-        $base->Cerrar();
-        return $respuesta;
 	}
 
 	public function modificar(){

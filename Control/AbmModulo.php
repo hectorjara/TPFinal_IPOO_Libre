@@ -5,7 +5,6 @@ include_once '../Modelo/ModuloEnLinea.php';
 class AbmModulo{
 
 	public function insertaModulo($descripcion,$tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad, $enLinea, $link, $bonificacion){
-        $respuesta = null;
 		if ($enLinea){
 			$unModulo = new ModuloEnLinea();
 			$unModulo->cargarEnLinea(null, $descripcion,$tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad, $link, $bonificacion);// null va a cambiar por el $id que devuelva la insercion
@@ -13,13 +12,11 @@ class AbmModulo{
 			$unModulo = new Modulo();
 			$unModulo->cargar(null, $descripcion,$tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad);// null va a cambiar por el $id que devuelva la insercion
 		}
-		$sePudoInsertar = $unModulo->insertar();
-		if ($sePudoInsertar){
-			$respuesta = "OK";	
+		if ($unModulo->insertar()){
+			return $unModulo;
 		}else{
-            $respuesta = $unModulo->getMensajeOperacion();
+            return $unModulo->getMensajeOperacion();
 		}
-        return $respuesta;
 	}
 
 	public function modificarModulo($obj_Modulo, $descripcion,$tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad, $enLinea, $link, $bonificacion){

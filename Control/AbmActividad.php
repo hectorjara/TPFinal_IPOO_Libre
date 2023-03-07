@@ -4,16 +4,14 @@ include_once '../Modelo/Actividad.php';
 class AbmActividad{
 
 	public function insertaActividad($descripcion_corta,$descripcion_larga){
-        $respuesta = null;
 		$unaActividad = new Actividad();
         $unaActividad->cargar(null, $descripcion_corta, $descripcion_larga);// null va a cambiar por el $id que devuelva la insercion
-		$sePudoInsertar = $unaActividad->insertar();
-		if ($sePudoInsertar){
-			$respuesta = "OK";	
+		if ($unaActividad->insertar()){
+			return $unaActividad;
 		}else{
-            $respuesta = $unaActividad->getMensajeOperacion();
+            return $unaActividad->getMensajeOperacion();
 		}
-        return $respuesta;
+
 	}
 
 	public function modificarActividad($obj_Actividad, $descripcion_corta, $descripcion_larga){
@@ -46,7 +44,8 @@ class AbmActividad{
     }
 
 	public function getInscripciones($actividadElegida){
-		$coleccion = array();
+		$colInscripciones = array();
+		$col_Ins_UnModulo =  array();
 		$abmModulo = new AbmModulo();
 		$modulosP = $abmModulo->listarModulos();
 		$modulosEL = $abmModulo->listarModulosEnLinea();
@@ -55,7 +54,7 @@ class AbmActividad{
 			foreach($colModulos as $unModulo){
 				if ($unModulo->getObj_Actividad() == $actividadElegida){
 					$col_Ins_UnModulo = $abmModulo->getInscripciones($unModulo);
-					$colInscripciones = array_merge($coleccion, $col_Ins_UnModulo);
+					$colInscripciones = array_merge($colInscripciones, $col_Ins_UnModulo);
 				}
 			}
 			//---------------------------

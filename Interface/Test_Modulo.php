@@ -25,15 +25,16 @@ function insertarModulo($enLinea){
         $link = trim(fgets(STDIN));
         echo o." Ingrese la bonificacion que va a otorgar: ".f;
         $bonificacion = trim(fgets(STDIN));
-        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, $enLinea, $link, $bonificacion);
+        $moduloInsertado = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, $enLinea, $link, $bonificacion);
     }else{
-        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, $enLinea, null, null );
+        $moduloInsertado = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, $enLinea, null, null );
     }
     //------------------------------------------
-	if ($sePudoInsertar == "OK"){
+	if ($moduloInsertado instanceof Modulo || $moduloInsertado instanceof ModuloEnLinea){
+        echo $moduloInsertado;
         echo ok."El Modulo fue ingresado con exito".f."\n";
     }else{
-        echo er."Error al insertar modulo: ".$sePudoInsertar.f."\n";
+        echo er."Error al insertar modulo: ".$moduloInsertado.f."\n";
     }
 }
 
@@ -128,6 +129,9 @@ function verInscripcionesAlModulo(){
     if (is_array($colInscripciones)){
         foreach($colInscripciones as $unaInscripcion){
             echo $unaInscripcion;
+        }
+        if(empty($colInscripciones)){
+            echo d."No existen inscripciones a este Modulo".f."\n";
         }
     }else{
         echo er."Error al obtener la coleccion de inscripciones: ".$colInscripciones.f."\n";
