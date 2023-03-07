@@ -15,8 +15,8 @@ class ModuloEnLinea extends Modulo{
 		$this->bonificacion= 20;
 	}
 
-	public function cargarEnLinea($id_modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad, $link, $bonificacion){// O tambien $bonificacion = 20, Pero ya esta por defecto en el constructor.
-        parent::cargar($id_modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad);
+	public function cargarEnLinea($id_modulo, $descripcion,$tope_inscripcion, $costo , $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad, $link, $bonificacion){// O tambien $bonificacion = 20, Pero ya esta por defecto en el constructor.
+        parent::cargar($id_modulo, $descripcion,$tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad);
         $this->setLink($link);
 		$this->setBonificacion($bonificacion);
 	}
@@ -80,9 +80,13 @@ class ModuloEnLinea extends Modulo{
                         $descripcion = $obj_Modulo->getDescripcion();
                         $tope_inscripcion = $obj_Modulo->getTope_Inscripcion();
                         $costo = $obj_Modulo->getCosto();
+                        $fechaInicio = $obj_Modulo->getFechaInicio();
+                        $fechaFin = $obj_Modulo->getFechaFin();
+                        $horaInicio = $obj_Modulo->getHoraInicio();
+                        $horaCierre = $obj_Modulo->getHoraCierre();
                         $obj_Actividad = $obj_Modulo->getObj_Actividad();
                         $unModuloEnLinea = new ModuloEnLinea();
-                        $unModuloEnLinea->cargarEnLinea($id_modulo, $descripcion, $tope_inscripcion, $costo, $obj_Actividad, $link, $bonificacion);
+                        $unModuloEnLinea->cargarEnLinea($id_modulo, $descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad, $link, $bonificacion);
                         array_push($arregloModulosOL,$unModuloEnLinea);
                         $respuesta = $arregloModulosOL; 
                     }else{

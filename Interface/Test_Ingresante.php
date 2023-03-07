@@ -3,6 +3,7 @@ include_once 'Test_Actividad.php';
 include_once 'Test_Modulo.php';
 include_once  'Test_Inscripcion.php';
 include_once 'Test_MenuIngresantes.php';
+include_once '../Control/Borrar.php';
 
 const t = "\033[43m";//Color Titulo
 const f = "\33[0m";  //Fin Color
@@ -54,6 +55,17 @@ function mostrarMenu(){
 		$sigue = trim(fgets(STDIN));				
 	}		
 }
+
+function borrarBD(){
+	$borra = new Borrar();
+	$borra->eliminarInscripcionModulo();
+	$borra->eliminarInscripcion();
+	$borra->eliminarIngresante();
+	$borra->eliminarModuloEnLinea();
+	$borra->EliminarModulo();
+	$borra->eliminaractividad();
+}
+
 
 mostrarMenu();
 ?>

@@ -19,15 +19,23 @@ class Modulo{
 		$this->descripcion= "";
 		$this->tope_inscripcion= "";
         $this->costo= 0;
+		$this->setFechaInicio= "2000-01-01";
+		$this->setFechaFin= "2000-01-01";
+		$this->setHoraInicio= "00:00";
+		$this->setHoraCierre= "00:00";
         $this->obj_Actividad = null;
 		$this->col_Inscripciones = [];
 	}
 
-	public function cargar($id_modulo, $descripcion,$tope_inscripcion, $costo, $obj_Actividad){
+	public function cargar($id_modulo, $descripcion,$tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $obj_Actividad){
         $this->setId_Modulo($id_modulo);
 		$this->setDescripcion($descripcion);
 		$this->setTope_Inscripcion($tope_inscripcion);
         $this->setCosto($costo);
+		$this->setFechaInicio($fechaInicio);
+		$this->setFechaFin($fechaFin);
+		$this->setHoraInicio($horaInicio);
+		$this->setHoraCierre($horaCierre);
         $this->setObj_Actividad($obj_Actividad);
 	}
 
@@ -57,6 +65,34 @@ class Modulo{
 	}
 	public function setCosto($costo){
 		return $this->costo=$costo;
+	}
+
+	public function getFechaInicio(){
+		return $this->fechaInicio;
+	}
+	public function setFechaInicio($fechaInicio){
+		return $this->fechaInicio=$fechaInicio;
+	}
+
+	public function getFechaFin(){
+		return $this->fechaFin;
+	}
+	public function setFechaFin($fechaFin){
+		return $this->fechaFin=$fechaFin;
+	}
+
+	public function getHoraInicio(){
+		return $this->horaInicio;
+	}
+	public function setHoraInicio($horaInicio){
+		return $this->horaInicio=$horaInicio;
+	}
+
+	public function getHoraCierre(){
+		return $this->horaCierre;
+	}
+	public function setHoraCierre($horaCierre){
+		return $this->horaCierre=$horaCierre;
 	}
 
     public function getObj_Actividad(){
@@ -94,6 +130,11 @@ class Modulo{
 					$this->setDescripcion($row2['descripcion']);
 					$this->setTope_Inscripcion($row2['tope_inscripcion']);
                     $this->setCosto($row2['costo']);
+					$this->setFechaInicio($row2['fecha_inicio']);
+					$this->setFechaFin($row2['fecha_fin']);
+					$this->setHoraInicio($row2['Hora_inicio']);
+					$this->setHoraCierre($row2['hora_cierre']);
+					//--------------------------------------
                     $obj_Actividad = new Actividad();
 					$obj_Actividad->buscar($row2['id_actividad']);
                     if ($obj_Actividad){    
@@ -132,6 +173,11 @@ class Modulo{
 					$descripcion = $row2['descripcion'];
                     $tope_inscripcion = $row2['tope_inscripcion'];
                     $costo = $row2['costo'];
+					$fechaInicio = $row2['fecha_inicio'];
+					$fechaFin = $row2['fecha_fin'];
+					$horaInicio = $row2['Hora_inicio'];
+					$horaCierre = $row2['hora_cierre'];
+					//------------------------------------
                     $obj_Actividad = new Actividad();
 					$obj_Actividad->buscar($row2['id_actividad']);
                     if ($obj_Actividad){    
@@ -161,8 +207,8 @@ class Modulo{
         $respuesta = false;
 		$base=new BaseDatos();
         $id_actividad = $this->getObj_Actividad()->getId_Actividad();
-		$consultaInsertar="INSERT INTO modulo( descripcion, tope_inscripcion, costo, id_actividad) 
-				VALUES ('".$this->getDescripcion()."' , '".$this->getTope_Inscripcion()."' , '".$this->getCosto()."' , '".$id_actividad."')";
+		$consultaInsertar="INSERT INTO modulo( descripcion, tope_inscripcion, costo, fecha_inicio, fecha_fin, Hora_inicio, hora_cierre, id_actividad) 
+				VALUES ('".$this->getDescripcion()."' , '".$this->getTope_Inscripcion()."' , '".$this->getCosto()."' , '".$this->getFechaInicio()."' , '".$this->getFechaFin()."' , '".$this->getHoraInicio()."' , '".$this->getHoraCierre()."' , '".$id_actividad."')";
 		if($base->Iniciar()){
 			if($id = $base->devuelveIDInsercion($consultaInsertar)){
                 $this->setId_Modulo($id);
@@ -181,7 +227,7 @@ class Modulo{
         $respuesta = false;
 		$base=new BaseDatos();
         $id_actividad = $this->getObj_Actividad()->getId_Actividad();// <-----------
-		$consultaModifica="UPDATE modulo SET descripcion='".$this->getDescripcion()."', tope_inscripcion='".$this->getTope_Inscripcion()."', costo='".$this->getCosto()."', id_actividad='".$id_actividad."' WHERE id_modulo=". $this->getId_Modulo();
+		$consultaModifica="UPDATE modulo SET descripcion='".$this->getDescripcion()."', tope_inscripcion='".$this->getTope_Inscripcion()."', costo='".$this->getCosto()."', fecha_inicio='".$this->getFechaInicio()."', fecha_fin='".$this->getFechaFin()."', Hora_inicio='".$this->getHoraInicio()."', hora_cierre='".$this->getHoraCierre()."', id_actividad='".$id_actividad."' WHERE id_modulo=". $this->getId_Modulo();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
 				$respuesta = true;				
@@ -223,6 +269,10 @@ class Modulo{
                 "Descripcion:".$this->getDescripcion()."\n".
                 "Tope: ".$this->getTope_Inscripcion()."\n".
                 "Costo: ".$this->getCosto()."\n".
+				"Fecha de Inicio: ".$this->getFechaInicio()."\n".
+				"Fecha Finalizacion: ".$this->getFechaFin()."\n".
+				"Hora de inicio: ".$this->getHoraInicio()."\n".
+				"Hora de cierre: ".$this->getHoraCierre()."\n".
                 "Actividad: ".$this->getObj_Actividad()->getDescripcion_corta()."\n";// <--------
         return $cadena;
 	}

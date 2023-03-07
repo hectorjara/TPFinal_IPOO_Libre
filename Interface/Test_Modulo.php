@@ -9,6 +9,14 @@ function insertarModulo($enLinea){
 	$tope_inscripcion = trim(fgets(STDIN));
     echo o." Ingrese el costo: ".f;
 	$costo = trim(fgets(STDIN));
+    echo o." Ingrese la Fecha de Inicio (YYYY-MM-DD): ".f;
+	$fechaInicio = trim(fgets(STDIN));
+    echo o." Ingrese la Fecha de finalizacion (YYYY-MM-DD): ".f;
+	$fechaFin = trim(fgets(STDIN));
+    echo o." Ingrese el horario de inicio (HH:MM): ".f;
+	$horaInicio = trim(fgets(STDIN));
+    echo o." Ingrese el horario de cierre (HH:MM): ".f;
+	$horaCierre = trim(fgets(STDIN));
 	echo o." Ingrese la Actividad del Modulo de la siguiente lista: \n".f;
     $actividadElegida = listaActividades();
     //Consulto si es un Modulo en Linea o no---
@@ -17,9 +25,9 @@ function insertarModulo($enLinea){
         $link = trim(fgets(STDIN));
         echo o." Ingrese la bonificacion que va a otorgar: ".f;
         $bonificacion = trim(fgets(STDIN));
-        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $actividadElegida, $enLinea, $link, $bonificacion);
+        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, $enLinea, $link, $bonificacion);
     }else{
-        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $actividadElegida, $enLinea, null, null );
+        $sePudoInsertar = $abmModulo->insertaModulo($descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, $enLinea, null, null );
     }
     //------------------------------------------
 	if ($sePudoInsertar == "OK"){
@@ -74,6 +82,14 @@ function modificarModulo(){
     $tope_inscripcion = trim(fgets(STDIN));
     echo o." Ingrese el costo : ".f;
     $costo = trim(fgets(STDIN));
+    echo o." Ingrese la Fecha de Inicio (YYYY-MM-DD): ".f;
+	$fechaInicio = trim(fgets(STDIN));
+    echo o." Ingrese la Fecha de finalizacion (YYYY-MM-DD): ".f;
+	$fechaFin = trim(fgets(STDIN));
+    echo o." Ingrese el horario de inicio (HH:MM): ".f;
+	$horaInicio = trim(fgets(STDIN));
+    echo o." Ingrese el horario de cierre (HH:MM): ".f;
+	$horaCierre = trim(fgets(STDIN));
     echo o." Ingrese la Actividad del Modulo de la siguiente lista: \n".f;
     $actividadElegida = listaActividades();
     if ($moduloElegido instanceof ModuloEnLinea){// Modifico Modulo En Linea
@@ -81,9 +97,9 @@ function modificarModulo(){
         $link = trim(fgets(STDIN));
         echo o." Ingrese la bonificacion que va a otorgar: ".f;
         $bonificacion = trim(fgets(STDIN));
-        $sePudoModificar = $abmModulo->modificarModulo($moduloElegido, $descripcion, $tope_inscripcion, $costo, $actividadElegida, true, $link, $bonificacion);
+        $sePudoModificar = $abmModulo->modificarModulo($moduloElegido, $descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, true, $link, $bonificacion);
     }elseif($moduloElegido instanceof Modulo){
-        $sePudoModificar = $abmModulo->modificarModulo($moduloElegido, $descripcion, $tope_inscripcion, $costo, $actividadElegida, false, null, null);
+        $sePudoModificar = $abmModulo->modificarModulo($moduloElegido, $descripcion, $tope_inscripcion, $costo, $fechaInicio, $fechaFin, $horaInicio, $horaCierre, $actividadElegida, false, null, null);
     }
     if ($sePudoModificar == "OK"){
         echo ok." El modulo fue modificado con exito".f."\n";
