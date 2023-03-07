@@ -244,11 +244,16 @@ class Modulo{
 	public function eliminar(){	
         $respuesta = false;
 		$base=new BaseDatos();
-		//Debo eliminar de la tabla intermedia la relacion y si la inscripcion tenia un solo modulo, proceder a borrar la inscripcion.
+		//Debo eliminar de la tabla intermedia la relacion y si la inscripcion tenia un solo modulo, proceder a borrar la inscripcion. VER AbmModulo
 		if($base->Iniciar()){
-			$consultaBorra="DELETE FROM modulo  WHERE id_modulo=". $this->getId_Modulo();
-			if($base->Ejecutar($consultaBorra)){
-				$respuesta = true;
+			$consultaBorraRelacion = "DELETE FROM `inscripcion-modulo` WHERE `id_modulo` = ".$this->getId_Modulo().";";
+			if($base->Ejecutar($consultaBorraRelacion)){
+				$consultaBorra="DELETE FROM modulo  WHERE id_modulo=". $this->getId_Modulo();
+				if($base->Ejecutar($consultaBorra)){
+					$respuesta = true;
+				}else{
+					$this->setMensajeOperacion($base->getError());	
+				}
 			}else{
 				$this->setMensajeOperacion($base->getError());				
 			}

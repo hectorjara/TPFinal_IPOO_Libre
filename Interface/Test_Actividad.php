@@ -58,6 +58,10 @@ function eliminarActividad(){
     $sePudoEliminar = $abmActividad->eliminarActividad($actividadElegida);
     if ($sePudoEliminar == "OK"){
         echo ok." La actividad fue eliminada con exito".f."\n";
+    }elseif($sePudoEliminar == "OK_I"){
+        echo ok." La actividad, modulos e inscripciones fueron eliminados con exito".f."\n";
+    }elseif($sePudoEliminar == "OK_M"){
+        echo ok." La actividad, y modulos fueron eliminados con exito".f."\n";
     }else{
         echo er."Error al eliminar Actividad: ".$sePudoEliminar.f."\n";
     }

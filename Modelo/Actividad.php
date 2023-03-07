@@ -168,6 +168,15 @@ class Actividad{
         return $respuesta;
 	}
 
+	public function getColModulosBaseDatos(){
+		$colModulos = Modulo::listar(" WHERE modulo.id_actividad = ".$this->getId_Actividad());
+		if(is_array($colModulos)){
+			return $colModulos;
+		}else{
+			$this->setMensajeOperacion($colModulos);
+		}
+	}
+
 
 	public function __toString(){
         $cadena = "________\nActividad:\n".

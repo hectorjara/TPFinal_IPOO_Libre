@@ -43,10 +43,27 @@ class AbmModulo{
 	}
 
 	public function eliminarModulo($obj_Modulo){
+		//Debo eliminar de la tabla intermedia la relacion y si la inscripcion tenia un solo modulo, proceder a borrar la inscripcion.
+		$borradaInscripcion = false;
+		$inscripcionesDelModulo = $this->getInscripciones($obj_Modulo);
+		foreach($inscripcionesDelModulo as $unaInscripcion){
+			$colModulosDeUnaInscripcion = $unaInscripcion->getCol_Modulos_BDatos();
+			if(count($colModulosDeUnaInscripcion) == 1){
+				$unicaInscripcion = $inscripcionesDelModulo[0];
+				$abmInscripcion = new AbmInscripcion();
+				$abmInscripcion->eliminarInscripcion($unicaInscripcion);
+				$borradaInscripcion = true;
+			}
+		}
+		//----------------------------------
         $respuesta = null;
 		$sePudoEliminar = $obj_Modulo->eliminar();
 		if ($sePudoEliminar){
-			$respuesta = "OK";
+			if($borradaInscripcion){
+				$respuesta = "OK_I";
+			}else{
+				$respuesta = "OK";
+			}
 		}else{
             $respuesta = $obj_Modulo->getmensajeoperacion();
 		}

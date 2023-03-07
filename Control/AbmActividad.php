@@ -28,10 +28,30 @@ class AbmActividad{
 	}
 
 	public function eliminarActividad($obj_Actividad){
-        $respuesta = null;
+		$borradoModuloEInscripcion = false;
+		$borradoModulo = false;
+		$respuesta = null;
+		$colModulosDeActividad = $obj_Actividad->getColModulosBaseDatos();
+		if(!empty($colModulosDeActividad)){
+			$abmModulo = new AbmModulo();
+			foreach($colModulosDeActividad as $moduloABorrar){
+				$borradoOk = $abmModulo->eliminarModulo($moduloABorrar);
+				if($borradoOk == "OK"){
+					$borradoModulo = true;
+				}elseif($borradoOk == "OK_I"){
+					$borradoModuloEInscripcion = true;
+				}
+			}
+		}
 		$sePudoEliminar = $obj_Actividad->eliminar();
 		if ($sePudoEliminar){
-			$respuesta = "OK";
+			if($borradoModuloEInscripcion){
+				$respuesta = "OK_I";
+			}elseif($borradoModulo){
+				$respuesta = "OK_M";
+			}else{
+				$respuesta = "OK";
+			}			
 		}else{
             $respuesta = $obj_Actividad->getmensajeoperacion();
 		}
