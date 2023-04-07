@@ -117,8 +117,8 @@ function eliminarModulo(){
     $sePudoEliminar = $abmModulo->eliminarModulo($moduloElegido);
     if ($sePudoEliminar == "OK"){
         echo ok." El modulo fue eliminado con exito".f."\n";
-    }elseif($sePudoEliminar == "OK_I"){
-        echo ok." Se ha eliminado el modulo y la inscripcion con exito".f."\n";
+    }elseif($sePudoEliminar == "HAY_INS"){
+        echo er."No se pudo eliminar el Modulo por que hay una Inscripcion al mismo".f."\n";
     } else{
         echo er."Error al eliminar: ".$sePudoEliminar.f."\n";
     }

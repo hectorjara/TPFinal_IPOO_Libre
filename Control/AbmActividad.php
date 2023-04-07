@@ -28,7 +28,7 @@ class AbmActividad{
 	}
 
 	public function eliminarActividad($obj_Actividad){
-		$borradoModuloEInscripcion = false;
+		$hayInscripcion = false;
 		$borradoModulo = false;
 		$respuesta = null;
 		$colModulosDeActividad = $obj_Actividad->getColModulosBaseDatos();
@@ -38,22 +38,24 @@ class AbmActividad{
 				$borradoOk = $abmModulo->eliminarModulo($moduloABorrar);
 				if($borradoOk == "OK"){
 					$borradoModulo = true;
-				}elseif($borradoOk == "OK_I"){
-					$borradoModuloEInscripcion = true;
+				}elseif($borradoOk == "HAY_INS"){ //No se borro el Modulo, hay una inscripcion
+					$hayInscripcion = true;
 				}
 			}
 		}
-		$sePudoEliminar = $obj_Actividad->eliminar();
-		if ($sePudoEliminar){
-			if($borradoModuloEInscripcion){
-				$respuesta = "OK_I";
-			}elseif($borradoModulo){
-				$respuesta = "OK_M";
-			}else{
-				$respuesta = "OK";
-			}			
+		if($hayInscripcion){
+			$respuesta = "HAY_INS"; //No se borra la Actividad
 		}else{
-            $respuesta = $obj_Actividad->getmensajeoperacion();
+			$sePudoEliminar = $obj_Actividad->eliminar();
+			if ($sePudoEliminar){
+				if($borradoModulo){
+					$respuesta = "OK_M";
+				}else{
+					$respuesta = "OK";
+				}			
+			}else{
+				$respuesta = $obj_Actividad->getmensajeoperacion();
+			}
 		}
         return $respuesta;
 	}
