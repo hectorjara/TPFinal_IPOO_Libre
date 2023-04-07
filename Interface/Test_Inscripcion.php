@@ -7,6 +7,7 @@ function insertarInscripcion(){
         echo er."No estas logueado o no has elegido Ingresante.\nVe al Menu Ingresantes.\n".f;
     }else{
         $abmInscripcion = new AbmInscripcion();
+        $abmModulo = new AbmModulo();
         $fechaInscripcion = date('Y-m-d');
         //-----------------------------------
         $colModulos = array();
@@ -15,6 +16,10 @@ function insertarInscripcion(){
             $moduloElegido = listaModulos();
             if ($abmInscripcion->seRepiteActividad($moduloElegido, $colModulos)){ // Al crear una inscripcion inscripción no permitir que un ingresante se inscriba a mas de un módulo, de una misma actividad.
                 echo er."Ya te inscribiste a un Modulo con la Actividad: ".$moduloElegido->getObj_Actividad()->getDescripcion_corta().f."\n";
+                echo o." Desea ingresar otro Modulo? S/s ".f."\n";
+                $otroModulo = trim(fgets(STDIN));
+            }elseif($abmModulo->superaTopeInscripcion($moduloElegido)){
+                echo er."Este Modulo ha superado el Tope de Inscripcion".f."\n";
                 echo o." Desea ingresar otro Modulo? S/s ".f."\n";
                 $otroModulo = trim(fgets(STDIN));
             }else{

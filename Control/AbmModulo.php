@@ -96,5 +96,17 @@ class AbmModulo{
 		$col_ModulosEnLinea = ModuloEnLinea::listar($condicion);
 		return $col_ModulosEnLinea;
     }
+
+	public function superaTopeInscripcion($moduloElegido){
+		$seAlcanzoElTope = false;
+		$cantInscripcionesAlModulo = count($this->getInscripciones($moduloElegido));
+		$topeInscripcionesAlModulo = $moduloElegido->getTope_Inscripcion();
+		if($cantInscripcionesAlModulo == $topeInscripcionesAlModulo){
+			$seAlcanzoElTope = true;
+		}else{
+			$seAlcanzoElTope = false;
+		}
+		return $seAlcanzoElTope;
+	}
 }
 ?>
